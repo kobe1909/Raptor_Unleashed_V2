@@ -1,7 +1,13 @@
 #pragma once
 
+#include "GL/glew.h"
 #include "GLFW/glfw3.h"
 #include <functional>
+
+#define ASSERT(x) if (!(x)) __debugbreak();
+#define GLCALL(x) GLClearError();\
+	x;\
+	ASSERT(GLLogCall(#x, __FILE__, __LINE__));
 
 class App {
 private:
