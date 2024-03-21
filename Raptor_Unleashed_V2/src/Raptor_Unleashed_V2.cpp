@@ -1,4 +1,3 @@
-#include <GLFW/glfw3.h>
 #include "Scene.h"
 #include <iostream>
 #include "App.h"
@@ -24,7 +23,7 @@ class Enemy : public BaseComponent {
         std::cout << "Enemy Update" << std::endl;
     }
     void OnDestroy() {
-        std::cout << "Enemy Destroy" << std::endl;
+        std::cout << "Enemy Destroy" << " : " << test << std::endl;
     }
 };
 
