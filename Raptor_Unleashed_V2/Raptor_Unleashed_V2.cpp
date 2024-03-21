@@ -3,14 +3,27 @@
 #include <iostream>
 
 class Player : public BaseComponent {
+    int x = 0;
     void OnStart() {
         std::cout << "Player Start" << std::endl;
     }
     void OnUpdate() {
-        std::cout << "Player Update" << std::endl;
+        std::cout << "Player Update" << " : " << x << std::endl;
+        x++;
     }
     void OnDestroy() {
         std::cout << "Player Destroy" << std::endl;
+    }
+};
+class Enemy : public BaseComponent {
+    void OnStart() {
+        std::cout << "Enemy Start" << std::endl;
+    }
+    void OnUpdate() {
+        std::cout << "Enemy Update" << std::endl;
+    }
+    void OnDestroy() {
+        std::cout << "Enemy Destroy" << std::endl;
     }
 };
 
@@ -37,8 +50,9 @@ int main(void)
 
     Scene scene;
     Player player;
+    Enemy enemy;
 
-    scene.Register(&player);
+    scene.Register({ &player, &enemy });
 
     scene.Start();
 

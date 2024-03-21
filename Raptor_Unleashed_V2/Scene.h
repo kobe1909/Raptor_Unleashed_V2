@@ -8,6 +8,7 @@ public:
 	std::vector<BaseComponent*> objects = {};
 
 	void Register(BaseComponent*);
+	void Register(std::vector<BaseComponent*>);
 
 	void Start();
 	void Update();

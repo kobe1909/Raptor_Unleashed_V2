@@ -3,6 +3,11 @@
 void Scene::Register(BaseComponent* object) {
 	objects.push_back(object);
 }
+void Scene::Register(std::vector<BaseComponent*> new_objects) {
+	for (auto& element : new_objects) {
+		objects.push_back(element);
+	}
+}
 
 
 void Scene::Start() {
