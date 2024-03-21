@@ -35,9 +35,10 @@ int main(void) {
 
     Scene scene;
     Player player;
+    Player player2;
     Enemy enemy;
 
-    scene.Register({ &player, &enemy });
+    scene.Register({ &player, &player2, &enemy });
 
     scene.Start();
 
