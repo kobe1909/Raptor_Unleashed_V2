@@ -14,4 +14,21 @@
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Raptor_Unleashed_V2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="Dependecies\glfw-3.4\lib-vc2022\glfw3.lib" />
+    <Library Include="Dependecies\Libs\glfw3.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Dependecies\glfw-3.4\include\GLFW\glfw3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependecies\Includes\GLFW\glfw3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
 </Project>
