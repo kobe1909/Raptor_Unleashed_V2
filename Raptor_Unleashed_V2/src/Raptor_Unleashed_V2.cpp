@@ -8,7 +8,7 @@ class Player : public BaseComponent {
         std::cout << "Player Start" << std::endl;
     }
     void OnUpdate() {
-        std::cout << "Player Update" << " : " << x << std::endl;
+        std::cout << "Player Update: " << x << std::endl;
         x++;
     }
     void OnDestroy() {
@@ -23,7 +23,7 @@ class Enemy : public BaseComponent {
         std::cout << "Enemy Update" << std::endl;
     }
     void OnDestroy() {
-        std::cout << "Enemy Destroy" << " : " << test << std::endl;
+        std::cout << "Enemy Destroy: " << test << std::endl;
     }
 };
 
@@ -42,8 +42,16 @@ int main(void) {
 
     scene.Start();
 
+    float x = 0;
+    float speed = 0.01;
+
     app.Run([&]() {
         scene.Update();
+        glClearColor(1 - x, 0, x, 1);
+        x += speed;
+        if (x > 1 || x < 0) {
+            speed *= -1;
+        }
     });
 
     scene.Destroy();
