@@ -2,6 +2,7 @@
 
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
+#include <iostream>
 #include <functional>
 
 #define ASSERT(x) if (!(x)) __debugbreak();
@@ -9,49 +10,18 @@
 	x;\
 	ASSERT(GLLogCall(#x, __FILE__, __LINE__));
 
-void GLClearError() {
-	while (glGetError() != GL_NO_ERROR);
-}
+void GLClearError();
 
-bool GLLogCall(const char* function, const char* file, int line) {
-	while (GLenum error = glGetError()) {
-		std::cout << "[OpenGL Error] (" << error << "): " << function << " in " << file << " on " << line << std::endl;
-		return false;
-	}
-
-	return true;
-}
+bool GLLogCall(const char* function, const char* file, int line);
 
 class App {
 private:
 	GLFWwindow* window;
+	double lastTime = 0;
 
 public:
-	bool CreateWindow(int width, int height, const char *title) {
-		if (!glfwInit())
-			return false;
-		 
-		window = glfwCreateWindow(width, height, title, NULL, NULL);
-		if (!window) {
-			glfwTerminate();
-			return false;
-		}
+	bool CreateWindow(int width, int height, const char* title);
 
-		glfwMakeContextCurrent(window);
-		glClearColor(1, 0, 0, 1);
-
-		return true;
-	}
-
-	void Run(std::function<void()> fun) {
-		while (!glfwWindowShouldClose(window)) {
-			glClear(GL_COLOR_BUFFER_BIT);
-
-			fun();
-
-			glfwSwapBuffers(window);
-			glfwPollEvents();
-		}
-	}
+	void Run(std::function<void(double)> fun);
 };
 
