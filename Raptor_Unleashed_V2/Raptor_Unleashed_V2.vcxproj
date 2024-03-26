@@ -159,7 +159,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="res\shaders\Camera.shader" />
     <ClCompile Include="src\App.cpp" />
+    <ClCompile Include="src\mesh\BufferObject.h" />
+    <ClCompile Include="src\mesh\mesh.cpp" />
     <ClCompile Include="src\Raptor_Unleashed_V2.cpp" />
     <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\shader.cpp" />
@@ -170,6 +173,10 @@
     <ClInclude Include="src\BaseComponent.h" />
     <ClInclude Include="Dependecies\glfw-3.4\include\GLFW\glfw3.h" />
     <ClInclude Include="Dependecies\Includes\GLFW\glfw3.h" />
+    <ClInclude Include="src\mesh\ArrayObject.h" />
+    <ClInclude Include="src\mesh\IndexObject.h" />
+    <ClInclude Include="src\mesh\LayoutObject.h" />
+    <ClInclude Include="src\mesh\mesh.h" />
     <ClInclude Include="src\Scene.h" />
     <ClInclude Include="src\shader.h" />
     <ClInclude Include="src\Transform.h" />
