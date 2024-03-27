@@ -69,7 +69,8 @@ unsigned int Shader::CompileShader(unsigned int type, const std::string& source)
 }
 
 unsigned int Shader::CreateShader(const std::string& vertexShader, const std::string& fragmentShader) {
-	unsigned int program = glCreateProgram();
+	GLCALL(unsigned int program = glCreateProgram());
+	std::cout << program << std::endl;
 	unsigned int vs = CompileShader(GL_VERTEX_SHADER, vertexShader);
 	unsigned int fs = CompileShader(GL_FRAGMENT_SHADER, fragmentShader);
 
@@ -77,7 +78,7 @@ unsigned int Shader::CreateShader(const std::string& vertexShader, const std::st
 	GLCALL(glAttachShader(program, fs));
 	GLCALL(glLinkProgram(program));
 	GLCALL(glValidateProgram(program));
-
+	 
 	GLCALL(glDeleteShader(vs));
 	GLCALL(glDeleteShader(fs));
 

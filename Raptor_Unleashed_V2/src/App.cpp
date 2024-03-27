@@ -26,6 +26,7 @@ bool App::CreateWindow(int width, int height, const char* title) {
 	}
 
 	glfwMakeContextCurrent(window);
+	glewInit();
 	glClearColor(1, 0, 0, 1);
 
 	return true;

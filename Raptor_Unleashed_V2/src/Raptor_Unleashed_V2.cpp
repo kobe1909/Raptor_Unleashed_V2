@@ -1,6 +1,8 @@
 #include "Scene.h"
 #include <iostream>
 #include "App.h"
+#include "shader.h"
+#include "mesh/mesh.h"
 
 class Player : public BaseComponent {
     int x = 0;
@@ -37,6 +39,9 @@ int main(void) {
     Player player;
     Player player2;
     Enemy enemy;
+
+    Shader shader("res/shaders/Camera.hlsl");
+    Mesh mesh("test");
 
     scene.Register({ &player, &player2, &enemy });
 

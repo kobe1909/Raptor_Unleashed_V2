@@ -159,7 +159,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="res\shaders\Camera.shader" />
     <ClCompile Include="src\App.cpp" />
     <ClCompile Include="src\mesh\BufferObject.h" />
     <ClCompile Include="src\mesh\mesh.cpp" />

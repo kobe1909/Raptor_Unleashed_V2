@@ -22,6 +22,7 @@ public:
 		const unsigned int* triangleData, 
 		unsigned int triangleCount
 	);
+	Mesh(std::string filePath);
 
 	unsigned int GetTriangleCount();
 

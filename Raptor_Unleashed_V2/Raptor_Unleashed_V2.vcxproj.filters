@@ -36,9 +36,6 @@
     <ClCompile Include="src\mesh\BufferObject.h">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="res\shaders\Camera.shader">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependecies\glfw-3.4\include\GLFW\glfw3.h">

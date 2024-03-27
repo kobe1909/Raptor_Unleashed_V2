@@ -17,6 +17,10 @@ Mesh::Mesh(
 	m_arrayObject.AddBuffer(m_bufferObject, layout);
 }
 
+Mesh::Mesh(std::string filePath) : m_bufferObject(nullptr, 0), m_indexObject(nullptr, 0) {
+
+}
+
 unsigned int Mesh::GetTriangleCount() {
 	return m_indexObject.GetCount();
 }
