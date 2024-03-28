@@ -2,7 +2,6 @@
 #include <iostream>
 #include "App.h"
 #include "shader.h"
-#include "mesh/mesh.h"
 #include "assimp/Importer.hpp"
 
 class Player : public BaseComponent {
@@ -54,7 +53,6 @@ int main(void) {
     Cube cube;
 
     Shader shader("res/shaders/Camera.hlsl");
-    Mesh mesh("test");
 
     //scene.Register({ &player, &player2, &enemy });
     scene.Register({ &cube });
