@@ -1,32 +1,33 @@
 #pragma once
 
-#include "../App.h"
+#include "glm/glm.hpp"
+#include <string>
 #include <vector>
+#include "../shader.h"
 
-#include "BufferObject.h"
-#include "ArrayObject.h"
-#include "IndexObject.h"
-#include "LayoutObject.h"
-
-class Mesh { 
-private:
-	BufferObject m_bufferObject;
-	IndexObject  m_indexObject;
-	ArrayObject  m_arrayObject;
-
-public:
-	Mesh(
-		const void* vertices, 
-		unsigned int verticesSize, 
-		LayoutObject& layout, 
-		const unsigned int* triangleData, 
-		unsigned int triangleCount
-	);
-	Mesh(std::string filePath);
-
-	unsigned int GetTriangleCount();
-
-	void Bind() const;
-	void UnBind() const;
+struct Vertex {
+	glm::vec3 Position;
+	glm::vec3 Normal;
+	glm::vec3 TexCoords;
 };
 
+struct Texture {
+	unsigned int id;
+	std::string type;
+};
+
+class Mesh {
+public:
+	// Mesh data
+	std::vector<Vertex>       vertices;
+	std::vector<unsigned int> indices;
+	std::vector<Texture>      textures;
+
+	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
+	void Draw(Shader& shader);
+
+private:
+	unsigned int arrayObject, bufferObject, indexObject;
+
+	void setupMesh();
+};

@@ -3,6 +3,7 @@
 #include "App.h"
 #include "shader.h"
 #include "mesh/mesh.h"
+#include "assimp/Importer.hpp"
 
 class Player : public BaseComponent {
     int x = 0;
@@ -28,6 +29,17 @@ class Enemy : public BaseComponent {
         //std::cout << "Enemy Destroy: " << test << std::endl;
     }
 };
+class Cube : public BaseComponent {
+public:
+    void OnStart() {
+    }
+    void OnUpdate() {
+
+    }
+    void OnDestroy() {
+        
+    }
+};
 
 int main(void) {
     App app;
@@ -36,14 +48,16 @@ int main(void) {
     }
 
     Scene scene;
-    Player player;
-    Player player2;
-    Enemy enemy;
+    //Player player;
+    //Player player2;
+    //Enemy enemy;
+    Cube cube;
 
     Shader shader("res/shaders/Camera.hlsl");
     Mesh mesh("test");
 
-    scene.Register({ &player, &player2, &enemy });
+    //scene.Register({ &player, &player2, &enemy });
+    scene.Register({ &cube });
 
     scene.Start();
 
