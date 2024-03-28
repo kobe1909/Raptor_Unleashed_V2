@@ -1,111 +1,64 @@
 #include "mesh.h"
-#include "LayoutObject.h"
-#include "IndexObject.h"
-#include "ArrayObject.h"
-#include "BufferObject.h"
+#include "../App.h"
 
-Mesh::Mesh(
-	const void* vertices, 
-	unsigned int verticesSize, 
-	LayoutObject& layout, 
-	const unsigned int* triangleData, 
-	unsigned int triangleCount
-) : m_bufferObject(vertices, verticesSize), 
-	m_indexObject(triangleData, triangleCount),
-	m_arrayObject() 
-{
-	m_arrayObject.AddBuffer(m_bufferObject, layout);
+Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures) {
+	this->vertices = vertices;
+	this->indices  = indices;
+	this->textures = textures;
+
+	setupMesh();
 }
 
-Mesh::Mesh(std::string filePath) : m_bufferObject(nullptr, 0), m_indexObject(nullptr, 0) {
+void Mesh::setupMesh() {
+	GLCALL(glGenVertexArrays(1, &arrayObject));
+	GLCALL(glGenBuffers(1, &bufferObject));
+	GLCALL(glGenBuffers(1, &indexObject));
 
-}
+	GLCALL(glBindVertexArray(arrayObject));
+	GLCALL(glBindBuffer(GL_ARRAY_BUFFER, bufferObject));
 
-unsigned int Mesh::GetTriangleCount() {
-	return m_indexObject.GetCount();
-}
+	GLCALL(glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), &vertices[0], GL_STATIC_DRAW));
 
-void Mesh::Bind() const {
-	m_arrayObject.Bind();
-	m_bufferObject.Bind();
-	m_indexObject.Bind();
-}
+	GLCALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexObject));
+	GLCALL(glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW));
 
-void Mesh::UnBind() const {
-	m_arrayObject.UnBind();
-	m_bufferObject.UnBind();
-	m_indexObject.UnBind();
-}
+	// Vertex positions
+	GLCALL(glEnableVertexAttribArray(0));
+	GLCALL(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0));
 
+	// Vertex normals
+	GLCALL(glEnableVertexAttribArray(1));
+	GLCALL(glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Normal)));
 
-BufferObject::BufferObject(const void* data, unsigned int size) : m_renderID(0) {
-	GLCALL(glGenBuffers(1, &m_renderID));
-	Bind();
-	GLCALL(glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW));
-}
+	// Vertex positions
+	GLCALL(glEnableVertexAttribArray(2));
+	GLCALL(glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords)));
 
-BufferObject::~BufferObject() {
-	GLCALL(glDeleteBuffers(1, &m_renderID));
-}
-
-void BufferObject::Bind() const {
-	GLCALL(glBindBuffer(GL_ARRAY_BUFFER, m_renderID));
-}
-
-void BufferObject::UnBind() const {
-	GLCALL(glBindBuffer(GL_ARRAY_BUFFER, 0));
-}
-
-
-ArrayObject::ArrayObject() : m_renderID(0) {
-	GLCALL(glGenVertexArrays(1, &m_renderID));
-}
-
-ArrayObject::~ArrayObject() {
-	GLCALL(glDeleteVertexArrays(1, &m_renderID));
-}
-
-void ArrayObject::AddBuffer(const BufferObject& vb, const LayoutObject& layout) {
-	Bind();
-	vb.Bind();
-
-	const auto& elements = layout.GetElements();
-	unsigned int offset = 0;
-
-	for (unsigned int i = 0; i < elements.size(); i++) {
-		const auto& element = elements[i];
-
-		GLCALL(glEnableVertexAttribArray(i));
-		GLCALL(glVertexAttribPointer(i, element.count, element.type, element.normalized, layout.GetStride(), (const void*)offset));
-		offset += element.count * BufferElement::GetSizeOfType(element.type);
-	}
-}
-
-void ArrayObject::Bind() const {
-	GLCALL(glBindVertexArray(m_renderID));
-}
-
-void ArrayObject::UnBind() const {
 	GLCALL(glBindVertexArray(0));
 }
 
+void Mesh::Draw(Shader &shader) {
+	unsigned int diffuseNr = 1;
+	unsigned int specularNr = 1;
 
-IndexObject::IndexObject(const unsigned int* data, unsigned int count) : m_renderID(0), m_count(0) {
-	ASSERT(sizeof(unsigned int) == sizeof(GLuint));
+	for (unsigned int i = 0; i < textures.size(); i++) {
+		GLCALL(glActiveTexture(GL_TEXTURE0 + i));
 
-	GLCALL(glGenBuffers(1, &m_renderID));
-	GLCALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_renderID));
-	GLCALL(glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(unsigned int), data, GL_STATIC_DRAW));
-} 
+		std::string number;
+		std::string name = textures[i].type;
 
-IndexObject::~IndexObject() {
-	GLCALL(glDeleteBuffers(1, &m_renderID));
-}
+		if (name == "texture_diffuse") 
+			number = std::to_string(diffuseNr++);
+		else if (name == "texture_specular")
+			number = std::to_string(specularNr++);
 
-void IndexObject::Bind() const {
-	GLCALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_renderID));
-}
+		shader.SetUniform1i((name + number).c_str(), i);
+		glBindTexture(GL_TEXTURE_2D, textures[i].id);
+	}
+	glActiveTexture(GL_TEXTURE0);
 
-void IndexObject::UnBind() const {
-	GLCALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
+	// Draw mesh
+	GLCALL(glBindVertexArray(arrayObject));
+	GLCALL(glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0));
+	GLCALL(glBindVertexArray(0));
 }
