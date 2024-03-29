@@ -3,6 +3,7 @@
 #include "App.h"
 #include "shader.h"
 #include "assimp/Importer.hpp"
+#include "Model.h"
 
 class Player : public BaseComponent {
     int x = 0;
@@ -10,7 +11,7 @@ class Player : public BaseComponent {
         //std::cout << "Player Start" << std::endl;
     }
     void OnUpdate() {
-        //std::cout << "Player Update: " << x << std::endl;
+        std::cout << "Player Update: " << x << std::endl;
         x++;
     }
     void OnDestroy() {
@@ -30,10 +31,11 @@ class Enemy : public BaseComponent {
 };
 class Cube : public BaseComponent {
 public:
+    Model model = Model("res/backpack/backpack.obj");
     void OnStart() {
     }
     void OnUpdate() {
-
+        model.Draw(shader);
     }
     void OnDestroy() {
         
@@ -47,7 +49,7 @@ int main(void) {
     }
 
     Scene scene;
-    //Player player;
+    Player player;
     //Player player2;
     //Enemy enemy;
     Cube cube;
@@ -55,7 +57,7 @@ int main(void) {
     Shader shader("res/shaders/Camera.hlsl");
 
     //scene.Register({ &player, &player2, &enemy });
-    scene.Register({ &cube });
+    scene.Register({ &cube, &player });
 
     scene.Start();
 
