@@ -34,6 +34,8 @@ public:
 
 	void SetUniformf(const std::string& name, std::vector<float> values);
 
+	void SetUniformVec3(const std::string& name, glm::vec3 values);
+
 private:
 	ShaderProgramSource ParseShader(const std::string& filePath);
 	unsigned int CompileShader(unsigned int type, const std::string& source);

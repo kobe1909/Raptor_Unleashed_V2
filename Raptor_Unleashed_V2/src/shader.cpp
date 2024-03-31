@@ -149,3 +149,7 @@ void Shader::SetUniformf(const std::string& name, std::vector<float> values) {
 		break;
 	}
 }
+
+void Shader::SetUniformVec3(const std::string& name, glm::vec3 values) {
+	GLCALL(glUniform3f(GetUniformLocation(name), values.x, values.y, values.z));
+}

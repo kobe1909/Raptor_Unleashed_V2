@@ -10,6 +10,28 @@ void Scene::Register(std::vector<BaseComponent*> new_objects) {
 	}
 }
 
+void Scene::AddLight(Light* light) {
+	lights.push_back(light);
+}
+void Scene::AddLight(std::vector<Light*> new_lights) {
+	for (auto& element : new_lights) {
+		lights.push_back(element);
+	}
+}
+
+
+void Scene::AddLightsToShader(Shader& shader) {
+	int nPointLights = 0;
+	for (Light*& light : lights) {
+		if (light->lightType == LightType::Directional) {
+			light->AddToShader(shader, "dirLight");
+		}
+		else if (light->lightType == LightType::Point) {
+			light->AddToShader(shader, std::string("pointLights" + nPointLights + ']'));
+			nPointLights++;
+		}
+	}
+}
 
 void Scene::Start() {
 	for (auto& element : objects) {
@@ -17,9 +39,9 @@ void Scene::Start() {
 	}
 }
 
-void Scene::Update(double deltaTime, App app) {
+void Scene::Update(double deltaTime, App& app, Scene& scene) {
 	for (auto& element : objects) {
-		element->OnUpdate(deltaTime, app);
+		element->OnUpdate(deltaTime, app, scene);
 	}
 }
 
