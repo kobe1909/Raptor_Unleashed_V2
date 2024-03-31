@@ -2,6 +2,7 @@
 
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
+#include "glm/glm.hpp"
 #include <iostream>
 #include <functional>
 
@@ -20,7 +21,10 @@ private:
 	double lastTime = 0;
 
 public:
-	bool CreateWindow(int width, int height, const char* title);
+	glm::vec2 windowSize;
+	glm::mat4 proj;
+
+	bool CreateWindow(glm::vec2 windowSize, const char* title);
 
 	void Run(std::function<void(double)> fun);
 };

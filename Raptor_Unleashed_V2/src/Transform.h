@@ -12,6 +12,6 @@ public:
 	Transform();
 	Transform(glm::vec3, glm::vec3, glm::vec3);
 
-	glm::mat4 GetModelMatrix();
+	glm::mat4 GetModelMatrix(float x);
 };
 

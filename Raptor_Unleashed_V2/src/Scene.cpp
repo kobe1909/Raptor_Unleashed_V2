@@ -1,4 +1,5 @@
 #include "Scene.h"
+#include "App.h"
 
 void Scene::Register(BaseComponent* object) {
 	objects.push_back(object);
@@ -16,9 +17,9 @@ void Scene::Start() {
 	}
 }
 
-void Scene::Update() {
+void Scene::Update(double deltaTime, App app) {
 	for (auto& element : objects) {
-		element->OnUpdate();
+		element->OnUpdate(deltaTime, app);
 	}
 }
 

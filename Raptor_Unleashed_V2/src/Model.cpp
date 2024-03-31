@@ -4,9 +4,11 @@
 #include "stb_image/stb_image.h"
 
 void Model::Draw(Shader& shader) {
+	shader.Bind();
 	for (unsigned int i = 0; i < meshes.size(); i++) {
 		meshes[i].Draw(shader);
 	}
+	shader.UnBind();
 }
 
 void Model::loadModel(std::string const &path) {
@@ -132,6 +134,7 @@ unsigned int Model::textureFromFile(const char* path, const std::string& directo
 	GLCALL(glGenTextures(1, &textureID));
 
 	int width, height, nrComponents;
+	stbi_set_flip_vertically_on_load(true);
 	unsigned char* data = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
 	if (data) {
 		GLenum format;

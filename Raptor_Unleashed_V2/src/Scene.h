@@ -11,7 +11,7 @@ public:
 	void Register(std::vector<BaseComponent*>);
 
 	void Start();
-	void Update();
+	void Update(double deltaTime, App app);
 	void Destroy();
 };
 
