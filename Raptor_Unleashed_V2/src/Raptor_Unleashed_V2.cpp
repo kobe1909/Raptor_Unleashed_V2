@@ -39,10 +39,10 @@ public:
     void OnUpdate(double deltaTime, App& app, Scene& scene) {
         shader.Bind();
         shader.SetUniformMat4f("model", transform.GetModelMatrix(x += (25.f * deltaTime)));
-        shader.SetUniformMat4f("view", glm::lookAt(glm::vec3(0, 4, 10), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
         shader.SetUniformMat4f("proj", app.proj);
         shader.SetUniform1f("material.shininess", 32.0f);
         scene.AddLightsToShader(shader);
+        scene.AddCameraToShader(shader);
         model.Draw(shader);
     }
     void OnDestroy() {
@@ -63,13 +63,14 @@ int main(void) {
     Cube cube;
 
     DirectionalLight dirLight(glm::vec3(0.f, -1.f, 0.f), glm::vec3(1.f, 1.f, 1.f), glm::vec3(1.f, 1.f, 1.f), glm::vec3(1.f, 1.f, 1.f));
-    PointLight pointLight(glm::vec3(0.f, 0.f, 10.f), glm::vec3(1.f, 1.f, 1.f), glm::vec3(1.f, 1.f, 1.f), glm::vec3(1.f, 1.f, 1.f), 1, 0.35f, 0.44f);
+    PointLight pointLight(glm::vec3(0.f, 0.f, 2.f), glm::vec3(1.f, 1.f, 1.f), glm::vec3(1.f, 1.f, 1.f), glm::vec3(1.f, 1.f, 1.f), 1, 0.35f, 0.44f);
 
     Shader shader("res/shaders/Camera.hlsl");
 
     //scene.Register({ &player, &player2, &enemy });
     scene.Register({ &cube });
     scene.AddLight({ &dirLight, &pointLight });
+    scene.camera = Camera(glm::vec3(0, 4, 10), glm::vec3(0, 0, 0));
 
     scene.Start();
 
@@ -80,10 +81,15 @@ int main(void) {
         glClearColor(1 - x, 0, x, 1);
         scene.Update(deltaTime, app, scene);
         x += speed * deltaTime;
-        if (x > 1 || x < 0) {
+        if (x > 1) {
+            x = 1;
             speed *= -1;
         }
-        //std::cout << "dt = " << deltaTime << "\tf = " << 1 / deltaTime << std::endl;
+        if (x < 0) {
+            x = 0;
+            speed *= -1;
+        }
+        std::cout << "dt = " << deltaTime << "\tf = " << 1 / deltaTime << "\t" << x << std::endl;
     });
 
     scene.Destroy();

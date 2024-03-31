@@ -4,6 +4,7 @@
 #include "shader.h"
 #include "App.h"
 
+// Forward declaration to avoid cycloid includes
 class Scene;
 
 class BaseComponent {

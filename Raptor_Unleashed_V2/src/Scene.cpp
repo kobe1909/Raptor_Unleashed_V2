@@ -27,10 +27,13 @@ void Scene::AddLightsToShader(Shader& shader) {
 			light->AddToShader(shader, "dirLight");
 		}
 		else if (light->lightType == LightType::Point) {
-			light->AddToShader(shader, std::string("pointLights[" + nPointLights + ']'));
+			light->AddToShader(shader, "pointLights[" + std::to_string(nPointLights) + "]");
 			nPointLights++;
 		}
 	}
+}
+void Scene::AddCameraToShader(Shader& shader) {
+	shader.SetUniformMat4f("view", camera.view);
 }
 
 void Scene::Start() {
