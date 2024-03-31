@@ -90,7 +90,7 @@ void main()
     for (int i = 0; i < NR_POINTS_LIGHTS; i++) 
         result += CalcPointLight(pointLights[i], norm, FragPos, viewDir);
     
-    FragColor = vec4(result, 1.0);
+    color = vec4(result, 1.0);
 };
 
 

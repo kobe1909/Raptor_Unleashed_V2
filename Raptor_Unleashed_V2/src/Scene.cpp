@@ -27,7 +27,7 @@ void Scene::AddLightsToShader(Shader& shader) {
 			light->AddToShader(shader, "dirLight");
 		}
 		else if (light->lightType == LightType::Point) {
-			light->AddToShader(shader, std::string("pointLights" + nPointLights + ']'));
+			light->AddToShader(shader, std::string("pointLights[" + nPointLights + ']'));
 			nPointLights++;
 		}
 	}

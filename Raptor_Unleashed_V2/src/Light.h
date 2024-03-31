@@ -2,6 +2,7 @@
 #include "shader.h"
 #include "glm/glm.hpp"
 #include <string>
+#include <iostream>
 
 enum LightType {
 	None = 0, Directional = 1, Point = 2
@@ -29,10 +30,10 @@ public:
 	}
 
 	void AddToShader(Shader& shader, std::string uniformBaseName) {
-		shader.SetUniformVec3((uniformBaseName + ".direction").c_str(), this->direction);
-		shader.SetUniformVec3((uniformBaseName + ".ambient").c_str(), this->ambient);
-		shader.SetUniformVec3((uniformBaseName + ".diffuse").c_str(), this->diffuse);
-		shader.SetUniformVec3((uniformBaseName + ".specular").c_str(), this->specular);
+		shader.SetUniformVec3((uniformBaseName + ".direction").c_str(), direction);
+		shader.SetUniformVec3((uniformBaseName + ".ambient").c_str(), ambient);
+		shader.SetUniformVec3((uniformBaseName + ".diffuse").c_str(), diffuse);
+		shader.SetUniformVec3((uniformBaseName + ".specular").c_str(), specular);
 	}
 };
 

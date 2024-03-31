@@ -1,8 +1,10 @@
 #pragma once
+//#include "Scene.h"
 #include "Transform.h"
 #include "shader.h"
 #include "App.h"
-#include "Scene.h"
+
+class Scene;
 
 class BaseComponent {
 public:

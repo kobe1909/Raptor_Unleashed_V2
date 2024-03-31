@@ -63,7 +63,7 @@ int main(void) {
     Cube cube;
 
     DirectionalLight dirLight(glm::vec3(0.f, -1.f, 0.f), glm::vec3(1.f, 1.f, 1.f), glm::vec3(1.f, 1.f, 1.f), glm::vec3(1.f, 1.f, 1.f));
-    PointLight pointLight(glm::vec3(0.f, 0.f, 4.f), glm::vec3(1.f, 1.f, 1.f), glm::vec3(1.f, 1.f, 1.f), glm::vec3(1.f, 1.f, 1.f), 1, 0.35f, 0.44f);
+    PointLight pointLight(glm::vec3(0.f, 0.f, 10.f), glm::vec3(1.f, 1.f, 1.f), glm::vec3(1.f, 1.f, 1.f), glm::vec3(1.f, 1.f, 1.f), 1, 0.35f, 0.44f);
 
     Shader shader("res/shaders/Camera.hlsl");
 
@@ -83,7 +83,7 @@ int main(void) {
         if (x > 1 || x < 0) {
             speed *= -1;
         }
-        std::cout << "dt = " << deltaTime << "\tf = " << 1 / deltaTime << std::endl;
+        //std::cout << "dt = " << deltaTime << "\tf = " << 1 / deltaTime << std::endl;
     });
 
     scene.Destroy();
