@@ -1,6 +1,12 @@
 #include "Scene.h"
 #include "App.h"
 
+Scene::Scene(std::vector<BaseComponent*> objects, std::vector<Light*> lights, Camera camera) {
+	this->objects = objects;
+	this->lights = lights;
+	this->camera = camera;
+}
+
 void Scene::Register(BaseComponent* object) {
 	objects.push_back(object);
 }

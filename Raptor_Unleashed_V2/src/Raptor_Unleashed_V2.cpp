@@ -33,14 +33,29 @@ class Enemy : public BaseComponent {
 class Cube : public BaseComponent {
 public:
     Model model = Model("res/backpack/backpack.obj");
-    float x = 0;
+    double x = 0;
+    double speed = 10;
+
     void OnStart() {
     }
     void OnUpdate(double deltaTime, App& app, Scene& scene) {
+        transform.rotation.y += (20.f * deltaTime);
+        transform.position.x = x;
+        double scale = x / 4 + 1.5;
+        transform.scale = glm::vec3(scale, scale, scale);
+        x += speed * deltaTime;
+        if (x > 2) {
+            x = 2;
+            speed *= -1;
+        }
+        if (x < -2) {
+            x = -2;
+            speed *= -1;
+        }
+
         shader.Bind();
-        shader.SetUniformMat4f("model", transform.GetModelMatrix(x += (25.f * deltaTime)));
+        shader.SetUniformMat4f("model", transform.GetModelMatrix());
         shader.SetUniformMat4f("proj", app.proj);
-        shader.SetUniform1f("material.shininess", 32.0f);
         scene.AddLightsToShader(shader);
         scene.AddCameraToShader(shader);
         model.Draw(shader);
@@ -56,7 +71,6 @@ int main(void) {
         return -1;
     }
 
-    Scene scene;
     Player player;
     //Player player2;
     //Enemy enemy;
@@ -66,11 +80,10 @@ int main(void) {
     PointLight pointLight(glm::vec3(0.f, 0.f, 2.f), glm::vec3(1.f, 1.f, 1.f), glm::vec3(1.f, 1.f, 1.f), glm::vec3(1.f, 1.f, 1.f), 1, 0.35f, 0.44f);
 
     Shader shader("res/shaders/Camera.hlsl");
+    Camera camera(glm::vec3(0, 4, 10), glm::vec3(0, 0, 0));
 
     //scene.Register({ &player, &player2, &enemy });
-    scene.Register({ &cube });
-    scene.AddLight({ &dirLight, &pointLight });
-    scene.camera = Camera(glm::vec3(0, 4, 10), glm::vec3(0, 0, 0));
+    Scene scene({ &cube }, { &dirLight, &pointLight }, camera);
 
     scene.Start();
 

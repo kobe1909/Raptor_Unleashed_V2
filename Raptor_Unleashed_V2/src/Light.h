@@ -61,7 +61,7 @@ public:
 		shader.SetUniformVec3((uniformBaseName + ".diffuse").c_str(), diffuse);
 		shader.SetUniformVec3((uniformBaseName + ".specular").c_str(), specular);
 		shader.SetUniform1f((uniformBaseName + ".constant").c_str(), constant);
-		shader.SetUniform1f((uniformBaseName + ".linear").c_str(), linear);
+		shader.SetUniform1f((uniformBaseName + ".Linear").c_str(), linear);
 		shader.SetUniform1f((uniformBaseName + ".quadratic").c_str(), quadratic);
 	}
 };
