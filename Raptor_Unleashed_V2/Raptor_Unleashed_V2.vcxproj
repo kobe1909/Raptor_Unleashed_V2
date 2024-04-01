@@ -167,6 +167,13 @@
     <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\shader.cpp" />
     <ClCompile Include="src\Transform.cpp" />
+    <ClCompile Include="src\ventor\imgui\imgui.cpp" />
+    <ClCompile Include="src\ventor\imgui\imgui_demo.cpp" />
+    <ClCompile Include="src\ventor\imgui\imgui_draw.cpp" />
+    <ClCompile Include="src\ventor\imgui\imgui_impl_glfw.cpp" />
+    <ClCompile Include="src\ventor\imgui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="src\ventor\imgui\imgui_tables.cpp" />
+    <ClCompile Include="src\ventor\imgui\imgui_widgets.cpp" />
     <ClCompile Include="src\ventor\stb_image\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -181,6 +188,15 @@
     <ClInclude Include="src\Scene.h" />
     <ClInclude Include="src\shader.h" />
     <ClInclude Include="src\Transform.h" />
+    <ClInclude Include="src\ventor\imgui\imconfig.h" />
+    <ClInclude Include="src\ventor\imgui\imgui.h" />
+    <ClInclude Include="src\ventor\imgui\imgui_impl_glfw.h" />
+    <ClInclude Include="src\ventor\imgui\imgui_impl_opengl3.h" />
+    <ClInclude Include="src\ventor\imgui\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="src\ventor\imgui\imgui_internal.h" />
+    <ClInclude Include="src\ventor\imgui\imstb_rectpack.h" />
+    <ClInclude Include="src\ventor\imgui\imstb_textedit.h" />
+    <ClInclude Include="src\ventor\imgui\imstb_truetype.h" />
     <ClInclude Include="src\ventor\stb_image\stb_image.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

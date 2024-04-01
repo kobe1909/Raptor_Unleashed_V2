@@ -34,6 +34,13 @@ bool App::CreateWindow(glm::vec2 windowSize, const char* title) {
 	//GLCALL(glClearColor(1, 0, 0, 1));
 	GLCALL(glEnable(GL_DEPTH_TEST));
 
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	ImGui::StyleColorsClassic();
+	ImGui_ImplGlfw_InitForOpenGL(window, true);
+	ImGui_ImplOpenGL3_Init("#version 330");
+
 	return true;
 }
 
@@ -48,13 +55,27 @@ void App::Run(std::function<void(double)> fun) {
 		}
 
 		GLCALL(glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT));
+
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
+
 		double current_time = glfwGetTime();
 		double deltaTime = current_time - lastTime;
 		lastTime = current_time;
 
 		fun(deltaTime);
 
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
+}
+
+void App::CleanUp() {
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplGlfw_Shutdown();
+	ImGui::DestroyContext();
 }

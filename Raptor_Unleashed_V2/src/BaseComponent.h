@@ -16,3 +16,19 @@ public:
 	virtual void OnUpdate(double deltaTime, App& app, Scene& scene) = 0;
 	virtual void OnDestroy() = 0;
 };
+
+/*
+* class Entity : public BaseComponent {
+*	additional variables
+*	
+*	void OnStart() {
+*		this code will be run at the start of the game
+*	}
+*	void OnUpdate() {
+*		this code will run every frame
+*	}
+*	void OnDestroy() {
+*		this code will run at the end of the game
+*	}
+* }
+*/
