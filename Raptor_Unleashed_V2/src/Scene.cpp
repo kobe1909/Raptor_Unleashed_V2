@@ -42,15 +42,15 @@ void Scene::AddCameraToShader(Shader& shader) {
 	shader.SetUniformMat4f("view", camera.view);
 }
 
-void Scene::Start(App& app, Scene& scene) {
+void Scene::Start() {
 	for (auto& element : objects) {
-		element->OnStart(app, scene);
+		element->OnStart();
 	}
 }
 
-void Scene::Update(double deltaTime) {
+void Scene::Update(double deltaTime, App& app, Scene& scene) {
 	for (auto& element : objects) {
-		element->OnUpdate(deltaTime);
+		element->OnUpdate(deltaTime, app, scene);
 	}
 }
 
