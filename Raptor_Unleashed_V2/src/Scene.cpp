@@ -36,6 +36,9 @@ void Scene::AddLightsToShader(Shader& shader) {
 			light->AddToShader(shader, "pointLights[" + std::to_string(nPointLights) + "]");
 			nPointLights++;
 		}
+		else if (light->lightType == LightType::Spot) {
+			light->AddToShader(shader, "spotLight");
+		}
 	}
 }
 void Scene::AddCameraToShader(Shader& shader) {

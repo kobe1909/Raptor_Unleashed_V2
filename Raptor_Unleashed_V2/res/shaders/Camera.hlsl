@@ -55,6 +55,16 @@ struct PointLight
     vec3 diffuse;
     vec3 specular;
 };
+struct SpotLight
+{
+    vec3 position;
+    vec3 direction;
+    float innerCutOff;
+    float outerCutOff;
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+};
 
 layout(location = 0) out
 vec4 color;
@@ -66,6 +76,7 @@ uniform Material material;
 uniform DirLight dirLight;
 #define NR_POINTS_LIGHTS 1
 uniform PointLight pointLights[NR_POINTS_LIGHTS];
+uniform SpotLight spotLight;
 
 in
 vec3 normal;
@@ -76,6 +87,7 @@ vec2 TexCoords;
 
 vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir);
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
+vec3 CalcSpotLight(SpotLight spotLight, vec3 normal, vec3 fragPos, vec3 viewDir);
 
 void main()
 {
@@ -89,6 +101,9 @@ void main()
     // Point lights
     for (int i = 0; i < NR_POINTS_LIGHTS; i++) 
         result += CalcPointLight(pointLights[i], norm, FragPos, viewDir);
+    
+    // Spot lights
+    result += CalcSpotLight(spotLight, norm, FragPos, viewDir);
     
     color = vec4(result, 1.0);
 };
@@ -134,4 +149,24 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
     diffuse *= attenuation;
     specular *= attenuation;
     return (ambient + diffuse + specular);
+}
+vec3 CalcSpotLight(SpotLight spotLight, vec3 norm, vec3 FragPos, vec3 viewDir)
+{
+    vec3 lightDir = normalize(spotLight.position - FragPos);
+    float theta = dot(lightDir, normalize(-spotLight.direction));
+    float epsilon = spotLight.innerCutOff - spotLight.outerCutOff;
+    float intensity = clamp((theta - spotLight.outerCutOff) / epsilon, 0.0, 1.0);
+    
+    if (theta > spotLight.innerCutOff)
+    {
+        vec3 ambient = spotLight.ambient * vec3(texture(material.texture_diffuse1, TexCoords));
+        vec3 diffuse = spotLight.diffuse * diff * vec3(texture(material.texture_diffuse1, TexCoords)) * intensity;
+        vec3 specular = spotLight.specular * spec * vec3(texture(material.texture_specular1, TexCoords)) * intensity;
+        
+        return (ambient + diffuse + specular);
+    }
+    else
+    {
+        return vec3(0.0, 0.0, 0.0);
+    }
 }
