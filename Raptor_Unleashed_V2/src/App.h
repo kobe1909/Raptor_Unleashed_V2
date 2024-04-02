@@ -28,10 +28,12 @@ public:
 	glm::vec2 windowSize;
 	glm::mat4 proj;
 
+	bool GetKeyState(int key, int state);
+
 	bool CreateWindow(glm::vec2 windowSize, const char* title);
 
 	void Run(std::function<void(double)> fun);
-
+	
 	void CleanUp();
 };
 

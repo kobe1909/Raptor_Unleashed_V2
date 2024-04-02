@@ -66,6 +66,7 @@ int main(void) {
             cube.transform.rotation.y += 15 * deltaTime;
         cube.transform.position.x = position;
 
+
         ImGui::Begin("Debug window");
         ImGui::Text("text");
         ImGui::Checkbox("Rotate Backpack", &rotate);

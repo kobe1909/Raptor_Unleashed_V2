@@ -16,6 +16,10 @@ bool GLLogCall(const char* function, const char* file, int line) {
 
 
 
+bool App::GetKeyState(int key, int state) {
+	return glfwGetKey(window, key) == state;
+}
+
 bool App::CreateWindow(glm::vec2 windowSize, const char* title) {
 	this->windowSize = windowSize;
 	proj = glm::perspective(45.f, windowSize.x / windowSize.y, 0.01f, 50.f);
