@@ -1,7 +1,7 @@
 #include "Scene.h"
 #include "App.h"
 
-Scene::Scene(std::vector<BaseComponent*> objects, std::vector<Light*> lights, Camera camera) {
+Scene::Scene(std::vector<BaseComponent*> objects, std::vector<Light*> lights, Camera& camera) {
 	this->objects = objects;
 	this->lights = lights;
 	this->camera = camera;
@@ -42,7 +42,7 @@ void Scene::AddLightsToShader(Shader& shader) {
 	}
 }
 void Scene::AddCameraToShader(Shader& shader) {
-	shader.SetUniformMat4f("view", camera.view);
+	shader.SetUniformMat4f("view", camera.GetView());
 }
 
 void Scene::Start() {

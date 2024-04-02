@@ -28,7 +28,13 @@ public:
 	glm::vec2 windowSize;
 	glm::mat4 proj;
 
+	glm::vec2 mousePos;
+
 	bool GetKeyState(int key, int state);
+
+	void mouseMoveCallBack(GLFWwindow* window, double xpos, double ypos) {
+		mousePos = glm::vec2(xpos, ypos);
+	}
 
 	bool CreateWindow(glm::vec2 windowSize, const char* title);
 

@@ -9,7 +9,7 @@
 class Scene {
 public:
 	Scene() {}
-	Scene(std::vector<BaseComponent*>, std::vector<Light*>, Camera);
+	Scene(std::vector<BaseComponent*>, std::vector<Light*>, Camera&);
 	std::vector<BaseComponent*> objects = {};
 	std::vector<Light*> lights = {};
 	Camera camera = Camera(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0));

@@ -45,6 +45,9 @@ bool App::CreateWindow(glm::vec2 windowSize, const char* title) {
 	ImGui_ImplGlfw_InitForOpenGL(window, true);
 	ImGui_ImplOpenGL3_Init("#version 330");
 
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+
 	return true;
 }
 
@@ -57,6 +60,10 @@ void App::Run(std::function<void(double)> fun) {
 			GLCALL(glViewport(0, 0, width, height));
 			proj = glm::perspective(45.f, windowSize.x / windowSize.y, 0.01f, 50.f);
 		}
+
+		double xPos, yPos;
+		glfwGetCursorPos(window, &xPos, &yPos);
+		mousePos = glm::vec2((float)xPos, (float)yPos);
 
 		GLCALL(glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT));
 

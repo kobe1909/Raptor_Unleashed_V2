@@ -37,7 +37,7 @@ int main(void) {
     DirectionalLight dirLight(glm::vec3(0.f, -1.f, 0.f), glm::vec3(1.f, 1.f, 1.f), glm::vec3(1.f, 1.f, 1.f), glm::vec3(1.f, 1.f, 1.f));
     PointLight pointLight(glm::vec3(0.f, 0.f, 2.f), glm::vec3(1.f, 1.f, 1.f), glm::vec3(1.f, 1.f, 1.f), glm::vec3(1.f, 1.f, 1.f), 1, 0.35f, 0.44f);
 
-    Camera camera(glm::vec3(0, 4, 10), glm::vec3(0, 0, 0));
+    Camera camera(glm::vec3(0, 4, 10), glm::vec3(0, -90.f, 0));
 
     Scene scene({ &cube }, { &dirLight, &pointLight }, camera);
 
@@ -46,11 +46,16 @@ int main(void) {
     double x = 0;
     double speed = .1;
     bool rotate = false;
+    bool firstFrame = true;
     float position = 0;
+    glm::vec2 lastMousePos = glm::vec2(app.windowSize.x / 2, app.windowSize.y / 2);
 
     app.Run([&](double deltaTime) {
+        if (firstFrame) {
+            lastMousePos = app.mousePos;
+            firstFrame = false;
+        }
         glClearColor(1 - x, 0, x, 1);
-        scene.Update(deltaTime, app, scene);
         x += speed * deltaTime;
         if (x > 1) {
             x = 1;
@@ -60,18 +65,38 @@ int main(void) {
             x = 0;
             speed *= -1;
         }
-        std::cout << "dt = " << deltaTime << "\tf = " << 1 / deltaTime << "\t" << x << std::endl;
+        //std::cout << "dt = " << deltaTime << "\tf = " << 1 / deltaTime << "\t" << x << std::endl;
 
         if (rotate)
             cube.transform.rotation.y += 15 * deltaTime;
         cube.transform.position.x = position;
 
+        float mouseOffsetX = app.mousePos.x - lastMousePos.x;
+        float mouseOffsetY = app.mousePos.y - lastMousePos.y;
+        lastMousePos = app.mousePos;
+        //std::cout << app.mousePos.x << "\t" << app.mousePos.y << "\t" << mouseOffsetX << "\t" << mouseOffsetY << std::endl;
 
-        ImGui::Begin("Debug window");
-        ImGui::Text("text");
-        ImGui::Checkbox("Rotate Backpack", &rotate);
-        ImGui::SliderFloat("Position", &position, -4, 4);
-        ImGui::End();
+        const float sensitivity = 0.1f;
+        mouseOffsetX *= sensitivity;
+        mouseOffsetY *= sensitivity;
+
+        scene.camera.rotation.y += mouseOffsetX;
+        scene.camera.rotation.x -= mouseOffsetY;
+        //camera.GetView();
+
+        if (scene.camera.rotation.x > 89.f) {
+            scene.camera.rotation.x = 89.f;
+        }   
+        if (scene.camera.rotation.x < -89.f) {
+            scene.camera.rotation.x = -89.f;
+        }
+        scene.Update(deltaTime, app, scene);
+
+        //ImGui::Begin("Debug window");
+        //ImGui::Text("text");
+        //ImGui::Checkbox("Rotate Backpack", &rotate);
+        //ImGui::SliderFloat("Position", &position, -4, 4);
+        //ImGui::End();
     });
 
     scene.Destroy();

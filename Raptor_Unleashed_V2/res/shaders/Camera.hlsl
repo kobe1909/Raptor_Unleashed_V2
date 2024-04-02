@@ -159,6 +159,13 @@ vec3 CalcSpotLight(SpotLight spotLight, vec3 norm, vec3 FragPos, vec3 viewDir)
     
     if (theta > spotLight.innerCutOff)
     {
+        // diffuse shading
+        float diff = max(dot(normal, lightDir), 0.0);
+    
+        // specular shading
+        vec3 reflectDir = reflect(-lightDir, normal);
+        float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
+        
         vec3 ambient = spotLight.ambient * vec3(texture(material.texture_diffuse1, TexCoords));
         vec3 diffuse = spotLight.diffuse * diff * vec3(texture(material.texture_diffuse1, TexCoords)) * intensity;
         vec3 specular = spotLight.specular * spec * vec3(texture(material.texture_specular1, TexCoords)) * intensity;
