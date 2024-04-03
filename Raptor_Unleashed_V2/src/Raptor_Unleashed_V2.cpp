@@ -66,7 +66,7 @@ int main(void) {
             speed *= -1;
         }
         //std::cout << "dt = " << deltaTime << "\tf = " << 1 / deltaTime << "\t" << x << std::endl;
-
+        rotate = app.GetKeyState(GLFW_KEY_R, GLFW_PRESS);
         if (rotate)
             cube.transform.rotation.y += 15 * deltaTime;
         cube.transform.position.x = position;
@@ -90,6 +90,17 @@ int main(void) {
         if (scene.camera.rotation.x < -89.f) {
             scene.camera.rotation.x = -89.f;
         }
+
+        const float cameraSpeed = 10;
+        if (app.GetKeyState(GLFW_KEY_UP, GLFW_PRESS))
+            scene.camera.position += cameraSpeed * (float)deltaTime * scene.camera.GetFrontVector();
+        if (app.GetKeyState(GLFW_KEY_DOWN, GLFW_PRESS))
+            scene.camera.position -= cameraSpeed * (float)deltaTime * scene.camera.GetFrontVector();
+        if (app.GetKeyState(GLFW_KEY_LEFT, GLFW_PRESS))
+            scene.camera.position -= glm::normalize(glm::cross(scene.camera.GetFrontVector(), scene.camera.GetUpVector())) * (float)deltaTime * cameraSpeed;
+        if (app.GetKeyState(GLFW_KEY_RIGHT, GLFW_PRESS))
+            scene.camera.position += glm::normalize(glm::cross(scene.camera.GetFrontVector(), scene.camera.GetUpVector())) * (float)deltaTime * cameraSpeed;
+
         scene.Update(deltaTime, app, scene);
 
         //ImGui::Begin("Debug window");
