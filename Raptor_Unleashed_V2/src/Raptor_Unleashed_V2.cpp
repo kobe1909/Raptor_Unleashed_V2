@@ -46,14 +46,13 @@ int main(void) {
     double x = 0;
     double speed = .1;
     bool rotate = false;
-    bool firstFrame = true;
     float position = 0;
     glm::vec2 lastMousePos = glm::vec2(app.windowSize.x / 2, app.windowSize.y / 2);
 
     app.Run([&](double deltaTime) {
-        if (firstFrame) {
+        if (app.firstMouseMove) {
             lastMousePos = app.mousePos;
-            firstFrame = false;
+            app.firstMouseMove = false;
         }
         glClearColor(1 - x, 0, x, 1);
         x += speed * deltaTime;

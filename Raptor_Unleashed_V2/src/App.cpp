@@ -61,14 +61,18 @@ void App::Run(std::function<void(double)> fun) {
 			proj = glm::perspective(45.f, windowSize.x / windowSize.y, 0.01f, 50.f);
 		}
 
-		if (GetKeyState(GLFW_KEY_LEFT_ALT, GLFW_PRESS))
-			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-		else 
-			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
 		double xPos, yPos;
 		glfwGetCursorPos(window, &xPos, &yPos);
 		mousePos = glm::vec2((float)xPos, (float)yPos);
+
+		if (GetKeyState(GLFW_KEY_LEFT_ALT, GLFW_PRESS)) {
+			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+			firstMouseMove = true;
+		}		
+
+		else {
+			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		}
 
 		GLCALL(glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT));
 

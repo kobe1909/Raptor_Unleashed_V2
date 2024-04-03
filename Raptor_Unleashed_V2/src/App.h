@@ -30,6 +30,8 @@ public:
 
 	glm::vec2 mousePos;
 
+	bool firstMouseMove = true;
+
 	bool GetKeyState(int key, int state);
 
 	void mouseMoveCallBack(GLFWwindow* window, double xpos, double ypos) {
