@@ -13,6 +13,7 @@ public:
     double speed = 10;
 
     void OnStart() {
+        std::cout << "hello world" << std::endl;
     }
     void OnUpdate(double deltaTime, App& app, Scene& scene) {
         shader.Bind();
