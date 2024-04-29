@@ -17,6 +17,7 @@ public:
     }
 
     void OnStart() {
+        std::cout << "hello world" << std::endl;
     }
     void OnUpdate(double deltaTime) {
         
