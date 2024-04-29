@@ -11,6 +11,12 @@ public:
 		this->scale = glm::vec3(1.f, 1.f, 1.f);
 	}
 
+	void SetTransform(Transform transform) {
+		this->position = transform.position;
+		this->rotation = transform.rotation;
+		this->scale    = transform.scale;
+	}
+
 	glm::vec3 GetUpVector() {
 		return glm::vec3(0, 1, 0);
 	}

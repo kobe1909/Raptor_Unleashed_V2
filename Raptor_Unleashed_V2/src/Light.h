@@ -15,6 +15,8 @@ public:
 	glm::vec3 diffuse;
 	glm::vec3 specular;
 	virtual void AddToShader(Shader& shader, std::string uniformBaseName) = 0;
+
+	operator Light* () { return this;  }
 };
 
 class DirectionalLight : public Light {

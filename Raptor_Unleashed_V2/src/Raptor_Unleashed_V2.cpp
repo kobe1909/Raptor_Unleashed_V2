@@ -12,14 +12,18 @@ public:
     double x = 0;
     double speed = 10;
 
+    Cube() {
+        name = "backpack";
+    }
+
     void OnStart() {
     }
-    void OnUpdate(double deltaTime, App& app, Scene& scene) {
-        shader.Bind();
+    void OnUpdate(double deltaTime) {
+        
+    }
+    void OnDraw() {
+        scene->AddSceneToShader(shader);
         shader.SetUniformMat4f("model", transform.GetModelMatrix());
-        shader.SetUniformMat4f("proj", app.proj);
-        scene.AddLightsToShader(shader);
-        scene.AddCameraToShader(shader);
         model.Draw(shader);
     }
     void OnDestroy() {
@@ -29,7 +33,7 @@ public:
 
 int main(void) {
     App app;
-    if (!app.CreateWindow({640, 480}, "Raptor Unleashed")) {
+    if (!app.CreateWindow({ 640, 480 }, "Raptor Unleashed")) {
         return -1;
     }
     Cube cube;
@@ -39,7 +43,11 @@ int main(void) {
 
     Camera camera(glm::vec3(0, 4, 10), glm::vec3(0, -90.f, 0));
 
-    Scene scene({ &cube }, { &dirLight, &pointLight }, camera);
+    Scene scene(&app);
+
+    scene.Register(cube);
+    scene.AddLight({ dirLight, pointLight });
+    scene.camera = camera;
 
     scene.Start();
 
@@ -48,6 +56,8 @@ int main(void) {
     bool rotate = false;
     float position = 0;
     glm::vec2 lastMousePos = glm::vec2(app.windowSize.x / 2, app.windowSize.y / 2);
+
+    //std::cout << scene.GetObjectByName<Cube>("backpack").speed << std::endl;
 
     app.Run([&](double deltaTime) {
         if (app.firstMouseMove) {
@@ -100,13 +110,14 @@ int main(void) {
         if (app.GetKeyState(GLFW_KEY_RIGHT, GLFW_PRESS))
             scene.camera.position += glm::normalize(glm::cross(scene.camera.GetFrontVector(), scene.camera.GetUpVector())) * (float)deltaTime * cameraSpeed;
 
-        scene.Update(deltaTime, app, scene);
+        scene.Update(deltaTime);
+        scene.Draw();
 
-        //ImGui::Begin("Debug window");
-        //ImGui::Text("text");
-        //ImGui::Checkbox("Rotate Backpack", &rotate);
-        //ImGui::SliderFloat("Position", &position, -4, 4);
-        //ImGui::End();
+        ImGui::Begin("Debug window");
+        ImGui::Text("text");
+        ImGui::Checkbox("Rotate Backpack", &rotate);
+        ImGui::SliderFloat("Position", &position, -4, 4);
+        ImGui::End();
     });
 
     scene.Destroy();

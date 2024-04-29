@@ -11,10 +11,17 @@ class BaseComponent {
 public:
 	Transform transform = Transform();
 	Shader shader = Shader("res/shaders/Camera.hlsl");
+	Scene* scene = nullptr;
+	std::string name = "";
 
 	virtual void OnStart() = 0;
-	virtual void OnUpdate(double deltaTime, App& app, Scene& scene) = 0;
+	virtual void OnUpdate(double deltaTime) = 0;
+	virtual void OnDraw() = 0;
 	virtual void OnDestroy() = 0;
+
+	operator BaseComponent* () {
+		return this;
+	}
 };
 
 /*
