@@ -15,12 +15,15 @@ public:
     void OnStart() {
         std::cout << "hello world" << std::endl;
     }
-    void OnUpdate(double deltaTime, App& app, Scene& scene) {
+    void OnUpdate(double deltaTime) {
+        std::cout << "Update: " << deltaTime << std::endl;
+    }
+    void OnDraw() {
         shader.Bind();
         shader.SetUniformMat4f("model", transform.GetModelMatrix());
-        shader.SetUniformMat4f("proj", app.proj);
-        scene.AddLightsToShader(shader);
-        scene.AddCameraToShader(shader);
+        shader.SetUniformMat4f("proj", app->proj);
+        scene->AddLightsToShader(shader);
+        scene->AddCameraToShader(shader);
         model.Draw(shader);
     }
     void OnDestroy() {
@@ -40,7 +43,7 @@ int main(void) {
 
     Camera camera(glm::vec3(0, 4, 10), glm::vec3(0, -90.f, 0));
 
-    Scene scene({ &cube }, { &dirLight, &pointLight }, camera);
+    Scene scene(&app, { &cube }, { &dirLight, &pointLight }, camera);
 
     scene.Start();
 
@@ -101,7 +104,8 @@ int main(void) {
         if (app.GetKeyState(GLFW_KEY_RIGHT, GLFW_PRESS))
             scene.camera.position += glm::normalize(glm::cross(scene.camera.GetFrontVector(), scene.camera.GetUpVector())) * (float)deltaTime * cameraSpeed;
 
-        scene.Update(deltaTime, app, scene);
+        scene.Update(deltaTime);
+        scene.Draw();
 
         //ImGui::Begin("Debug window");
         //ImGui::Text("text");

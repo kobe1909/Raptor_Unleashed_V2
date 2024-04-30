@@ -5,11 +5,14 @@
 #include "Light.h"
 #include "Transform.h"
 #include "Camera.h"
+#include "App.h"
 
 class Scene {
 public:
-	Scene() {}
-	Scene(std::vector<BaseComponent*>, std::vector<Light*>, Camera&);
+	App* app;
+
+	Scene(App* app) : app(app) {}
+	Scene(App* app, std::vector<BaseComponent*>, std::vector<Light*>, Camera&);
 	std::vector<BaseComponent*> objects = {};
 	std::vector<Light*> lights = {};
 	Camera camera = Camera(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0));
@@ -24,7 +27,8 @@ public:
 	void AddCameraToShader(Shader& shader);
 
 	void Start();
-	void Update(double deltaTime, App& app, Scene& scene);
+	void Update(double deltaTime);
+	void Draw();
 	void Destroy();
 };
 

@@ -1,18 +1,21 @@
 #include "Scene.h"
 #include "App.h"
 
-Scene::Scene(std::vector<BaseComponent*> objects, std::vector<Light*> lights, Camera& camera) {
-	this->objects = objects;
-	this->lights = lights;
+Scene::Scene(App* app, std::vector<BaseComponent*> objects, std::vector<Light*> lights, Camera& camera) {
+	this->app = app;
+	Register(objects);
+	AddLight(lights);
 	this->camera = camera;
 }
 
 void Scene::Register(BaseComponent* object) {
 	objects.push_back(object);
+	object->scene = this;
+	object->app = app;
 }
 void Scene::Register(std::vector<BaseComponent*> new_objects) {
 	for (auto& element : new_objects) {
-		objects.push_back(element);
+		Register(element);
 	}
 }
 
@@ -51,9 +54,15 @@ void Scene::Start() {
 	}
 }
 
-void Scene::Update(double deltaTime, App& app, Scene& scene) {
+void Scene::Update(double deltaTime) {
 	for (auto& element : objects) {
-		element->OnUpdate(deltaTime, app, scene);
+		element->OnUpdate(deltaTime);
+	}
+}
+
+void Scene::Draw() {
+	for (auto& element : objects) {
+		element->OnDraw();
 	}
 }
 
