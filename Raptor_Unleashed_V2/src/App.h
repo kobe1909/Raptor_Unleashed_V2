@@ -29,10 +29,13 @@ public:
 	glm::mat4 proj;
 
 	glm::vec2 mousePos;
+	glm::vec2 lastMousePos;
+	glm::vec2 mouseOffset;
 
 	bool firstMouseMove = true;
 
 	bool GetKeyState(int key, int state);
+	bool GetKeyState(int key);
 
 	void mouseMoveCallBack(GLFWwindow* window, double xpos, double ypos) {
 		mousePos = glm::vec2(xpos, ypos);

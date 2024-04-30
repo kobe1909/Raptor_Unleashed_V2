@@ -1,5 +1,5 @@
 #pragma once
-//#include "Scene.h"
+#include <string>
 #include "Transform.h"
 #include "shader.h"
 #include "App.h"
@@ -13,11 +13,14 @@ public:
 	Shader shader = Shader("res/shaders/Camera.hlsl");
 	Scene* scene = nullptr;
 	App* app = nullptr;
+	std::string name = "";
 
 	virtual void OnStart() = 0;
 	virtual void OnUpdate(double deltaTime) = 0;
 	virtual void OnDraw() = 0;
 	virtual void OnDestroy() = 0;
+
+	operator BaseComponent* () { return this; }
 };
 
 /*

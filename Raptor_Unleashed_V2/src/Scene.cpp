@@ -1,5 +1,6 @@
 #include "Scene.h"
 #include "App.h"
+#include <list>
 
 Scene::Scene(App* app, std::vector<BaseComponent*> objects, std::vector<Light*> lights, Camera& camera) {
 	this->app = app;
@@ -46,6 +47,16 @@ void Scene::AddLightsToShader(Shader& shader) {
 }
 void Scene::AddCameraToShader(Shader& shader) {
 	shader.SetUniformMat4f("view", camera.GetView());
+}
+
+BaseComponent* Scene::GetComponent(std::string name) {
+	for (auto& object : objects) {
+		if (object->name == name) {
+			return object;
+		}
+	}
+
+	return nullptr;
 }
 
 void Scene::Start() {

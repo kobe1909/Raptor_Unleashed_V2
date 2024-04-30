@@ -19,6 +19,9 @@ bool GLLogCall(const char* function, const char* file, int line) {
 bool App::GetKeyState(int key, int state) {
 	return glfwGetKey(window, key) == state;
 }
+bool App::GetKeyState(int key) {
+	return glfwGetKey(window, key) == GLFW_PRESS;
+}
 
 bool App::CreateWindow(glm::vec2 windowSize, const char* title) {
 	this->windowSize = windowSize;
@@ -64,6 +67,14 @@ void App::Run(std::function<void(double)> fun) {
 		double xPos, yPos;
 		glfwGetCursorPos(window, &xPos, &yPos);
 		mousePos = glm::vec2((float)xPos, (float)yPos);
+
+		if (firstMouseMove) {
+			lastMousePos = mousePos;
+			firstMouseMove = false;
+		}
+
+		mouseOffset = mousePos - lastMousePos;
+		lastMousePos = mousePos;
 
 		if (GetKeyState(GLFW_KEY_LEFT_ALT, GLFW_PRESS)) {
 			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);

@@ -26,6 +26,8 @@ public:
 	void AddLightsToShader(Shader& shader);
 	void AddCameraToShader(Shader& shader);
 
+	BaseComponent* GetComponent(std::string name);
+
 	void Start();
 	void Update(double deltaTime);
 	void Draw();
