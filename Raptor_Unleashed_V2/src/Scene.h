@@ -5,7 +5,7 @@
 #include "Light.h"
 #include "Transform.h"
 #include "Camera.h"
-#include "App.h"
+class App;
 
 class Scene {
 public:

@@ -101,6 +101,11 @@ void App::Run(std::function<void(double)> fun) {
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 		glfwSwapBuffers(window);
+
+		// Save the window buffer to a file
+		int* buffer = new int[windowSize.x * windowSize.y * 3];
+		GLCALL(glReadPixels(0, 0, windowSize.x, windowSize.y, GL_BGR, GL_UNSIGNED_BYTE, buffer));
+
 		glfwPollEvents();
 	}
 }

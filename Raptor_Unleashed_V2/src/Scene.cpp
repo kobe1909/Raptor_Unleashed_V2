@@ -1,5 +1,4 @@
 #include "Scene.h"
-#include "App.h"
 #include <list>
 
 Scene::Scene(App* app, std::vector<BaseComponent*> objects, std::vector<Light*> lights, Camera& camera) {

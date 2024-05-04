@@ -8,7 +8,9 @@
 #include "GLFW/glfw3.h"
 #include "glm/glm.hpp"
 #include <iostream>
+#include <vector>
 #include <functional>
+#include "Scene.h"
 
 #define ASSERT(x) if (!(x)) __debugbreak();
 #define GLCALL(x) GLClearError();\
@@ -31,6 +33,9 @@ public:
 	glm::vec2 mousePos;
 	glm::vec2 lastMousePos;
 	glm::vec2 mouseOffset;
+
+	std::vector<Scene*> scenes;
+	int activeScene = -1;
 
 	bool firstMouseMove = true;
 
