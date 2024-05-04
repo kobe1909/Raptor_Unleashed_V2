@@ -2,7 +2,6 @@
 #include <iostream>
 #include "App.h"
 #include "shader.h"
-#include "assimp/Importer.hpp"
 #include "Model.h"
 #include "Light.h"
 
@@ -18,7 +17,7 @@ public:
     }
 
     void OnStart() {
-        std::cout << "hello world" << std::endl;
+        std::cout << model.textures_loaded.size() << std::endl;
     }
     void OnUpdate(double deltaTime) {
         if (rotate)
@@ -85,7 +84,7 @@ public:
 
 int main(void) {
     App app;
-    if (!app.CreateWindow({ 640, 480 }, "Raptor Unleashed")) {
+    if (!app.CreateWindow({ 640 * 2, 480 * 2 }, "Raptor Unleashed", true)) {
         return -1;
     }
     Cube cube("Backpack");

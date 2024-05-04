@@ -23,11 +23,8 @@ bool App::GetKeyState(int key) {
 	return glfwGetKey(window, key) == GLFW_PRESS;
 }
 
-bool App::CreateWindow(glm::vec2 windowSize, const char* title) {
+bool App::CreateWindow(glm::vec2 windowSize, const char* title, bool maximize) {
 	this->windowSize = windowSize;
-	buffer = new int[windowSize.x, windowSize.y];
-	proj = glm::perspective(45.f, windowSize.x / windowSize.y, 0.01f, 50.f);
-
 	if (!glfwInit())
 		return false;
 
@@ -50,7 +47,15 @@ bool App::CreateWindow(glm::vec2 windowSize, const char* title) {
 	ImGui_ImplOpenGL3_Init("#version 330");
 
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	
+	if (maximize) {
+		glfwMaximizeWindow(window);
+		int width, height;
+		glfwGetWindowSize(window, &width, &height);
+		windowSize = glm::vec2(width, height);
+	}
 
+	proj = glm::perspective(45.f, windowSize.x / windowSize.y, 0.01f, 50.f);
 
 	return true;
 }

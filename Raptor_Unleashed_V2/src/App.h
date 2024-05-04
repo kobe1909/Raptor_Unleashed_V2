@@ -47,7 +47,7 @@ public:
 		mousePos = glm::vec2(xpos, ypos);
 	}
 
-	bool CreateWindow(glm::vec2 windowSize, const char* title);
+	bool CreateWindow(glm::vec2 windowSize, const char* title, bool maximize);
 
 	void Run(std::function<void(double)> fun);
 	

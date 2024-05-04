@@ -40,6 +40,7 @@ void Mesh::setupMesh() {
 void Mesh::Draw(Shader &shader) {
 	unsigned int diffuseNr = 1;
 	unsigned int specularNr = 1;
+	unsigned int normalNr = 1;
 
 	for (unsigned int i = 0; i < textures.size(); i++) {
 		GLCALL(glActiveTexture(GL_TEXTURE0 + i));
@@ -47,10 +48,12 @@ void Mesh::Draw(Shader &shader) {
 		std::string number;
 		std::string name = textures[i].type;
 
-		if (name == "texture_diffuse") 
+		if (name == "texture_diffuse")
 			number = std::to_string(diffuseNr++);
 		else if (name == "texture_specular")
 			number = std::to_string(specularNr++);
+		else if (name == "texture_normal")
+			number = std::to_string(normalNr++);
 
 		shader.SetUniform1i(("material." + name + number).c_str(), i);
 		GLCALL(glBindTexture(GL_TEXTURE_2D, textures[i].id));
