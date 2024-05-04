@@ -25,6 +25,7 @@ class App {
 private:
 	GLFWwindow* window;
 	double lastTime = 0;
+	int* buffer = nullptr;
 
 public:
 	glm::vec2 windowSize;

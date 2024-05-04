@@ -14,7 +14,6 @@ public:
 	void SetTransform(Transform transform) {
 		this->position = transform.position;
 		this->rotation = transform.rotation;
-		this->scale    = transform.scale;
 	}
 
 	glm::vec3 GetUpVector() {
@@ -31,5 +30,9 @@ public:
 
 	glm::mat4 GetView() {
 		return glm::lookAt(position, position + GetFrontVector(), GetUpVector());
+	}
+
+	operator Camera* () {
+		return this;
 	}
 };

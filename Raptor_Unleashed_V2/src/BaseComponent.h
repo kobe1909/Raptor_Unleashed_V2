@@ -2,10 +2,11 @@
 #include <string>
 #include "Transform.h"
 #include "shader.h"
-#include "App.h"
+#include "Model.h"
 
 // Forward declaration to avoid cycloid includes
 class Scene;
+class App;
 
 class BaseComponent {
 public:
@@ -19,6 +20,11 @@ public:
 	virtual void OnUpdate(double deltaTime) = 0;
 	virtual void OnDraw() = 0;
 	virtual void OnDestroy() = 0;
+
+	void Draw(Model& model) {
+		shader.SetUniformMat4f("model", transform.GetModelMatrix());
+		model.Draw(shader);
+	}
 
 	operator BaseComponent* () { return this; }
 };

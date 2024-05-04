@@ -1,7 +1,8 @@
 #include "Scene.h"
+#include "App.h"
 #include <list>
 
-Scene::Scene(App* app, std::vector<BaseComponent*> objects, std::vector<Light*> lights, Camera& camera) {
+Scene::Scene(App* app, std::vector<BaseComponent*> objects, std::vector<Light*> lights, Camera* camera) {
 	this->app = app;
 	Register(objects);
 	AddLight(lights);
@@ -29,21 +30,6 @@ void Scene::AddLight(std::vector<Light*> new_lights) {
 	}
 }
 
-template<class T>
-T Scene::GetObjectByName(std::string name) {
-	BaseComponent* object = nullptr;
-
-	for (auto& element : objects) {
-		if (element->name == name) {
-			object = element;
-			break;
-		}
-	}
-
-	T* derivedptr = reinterpret_cast<T*>(object);
-	return *derivedptr;
-}
-
 void Scene::AddLightsToShader(Shader& shader) {
 	int nPointLights = 0;
 	for (Light*& light : lights) {
@@ -60,36 +46,14 @@ void Scene::AddLightsToShader(Shader& shader) {
 	}
 }
 void Scene::AddCameraToShader(Shader& shader) {
-	shader.SetUniformMat4f("view", camera.GetView());
+	shader.SetUniformMat4f("view", camera->GetView());
 }
 
 void Scene::AddSceneToShader(Shader& shader) {
 	shader.Bind();
-	int nPointLights = 0;
-	for (Light*& light : lights) {
-		if (light->lightType == LightType::Directional) {
-			light->AddToShader(shader, "dirLight");
-		}
-		else if (light->lightType == LightType::Point) {
-			light->AddToShader(shader, "pointLights[" + std::to_string(nPointLights) + "]");
-			nPointLights++;
-		}
-		else if (light->lightType == LightType::Spot) {
-			light->AddToShader(shader, "spotLight");
-		}
-	}
-	shader.SetUniformMat4f("view", camera.GetView());
+	AddLightsToShader(shader);
+	AddCameraToShader(shader);
 	shader.SetUniformMat4f("proj", app->proj);
-}
-
-BaseComponent* Scene::GetComponent(std::string name) {
-	for (auto& object : objects) {
-		if (object->name == name) {
-			return object;
-		}
-	}
-
-	return nullptr;
 }
 
 void Scene::Start() {

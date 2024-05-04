@@ -25,6 +25,7 @@ bool App::GetKeyState(int key) {
 
 bool App::CreateWindow(glm::vec2 windowSize, const char* title) {
 	this->windowSize = windowSize;
+	buffer = new int[windowSize.x, windowSize.y];
 	proj = glm::perspective(45.f, windowSize.x / windowSize.y, 0.01f, 50.f);
 
 	if (!glfwInit())
@@ -62,6 +63,8 @@ void App::Run(std::function<void(double)> fun) {
 			windowSize = glm::vec2(width, height);
 			GLCALL(glViewport(0, 0, width, height));
 			proj = glm::perspective(45.f, windowSize.x / windowSize.y, 0.01f, 50.f);
+			delete[] buffer;
+			buffer = new int[width, height];
 		}
 
 		double xPos, yPos;
@@ -103,8 +106,7 @@ void App::Run(std::function<void(double)> fun) {
 		glfwSwapBuffers(window);
 
 		// Save the window buffer to a file
-		int* buffer = new int[windowSize.x * windowSize.y * 3];
-		GLCALL(glReadPixels(0, 0, windowSize.x, windowSize.y, GL_BGR, GL_UNSIGNED_BYTE, buffer));
+		//GLCALL(glReadPixels(0, 0, windowSize.x, windowSize.y, GL_BGR, GL_UNSIGNED_BYTE, buffer));
 
 		glfwPollEvents();
 	}
