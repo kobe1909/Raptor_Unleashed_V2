@@ -5,11 +5,13 @@
 #include "Light.h"
 #include "Transform.h"
 #include "Camera.h"
-#include "App.h"
+class App;
 
 class Scene {
 public:
-	Scene(App* app) { this->app = app;  }
+	App* app;
+
+	Scene(App* app) : app(app) {}
 	Scene(App* app, std::vector<BaseComponent*>, std::vector<Light*>, Camera&);
 	std::vector<BaseComponent*> objects = {};
 	std::vector<Light*> lights = {};
@@ -28,6 +30,8 @@ public:
 
 	template<class T>
 	T GetObjectByName(std::string name);
+
+	BaseComponent* GetComponent(std::string name);
 
 	void Start();
 	void Update(double deltaTime);

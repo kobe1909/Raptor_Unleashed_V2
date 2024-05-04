@@ -1,21 +1,22 @@
 #include "Scene.h"
-#include "App.h"
+#include <list>
 
 Scene::Scene(App* app, std::vector<BaseComponent*> objects, std::vector<Light*> lights, Camera& camera) {
 	this->app = app;
-	this->objects = objects;
-	this->lights = lights;
+	Register(objects);
+	AddLight(lights);
 	this->camera = camera;
 }
 
 void Scene::Register(BaseComponent* object) {
 	object->scene = this;
 	objects.push_back(object);
+	object->scene = this;
+	object->app = app;
 }
 void Scene::Register(std::vector<BaseComponent*> new_objects) {
 	for (auto& element : new_objects) {
-		objects.push_back(element);
-		element->scene = this;
+		Register(element);
 	}
 }
 
@@ -79,6 +80,16 @@ void Scene::AddSceneToShader(Shader& shader) {
 	}
 	shader.SetUniformMat4f("view", camera.GetView());
 	shader.SetUniformMat4f("proj", app->proj);
+}
+
+BaseComponent* Scene::GetComponent(std::string name) {
+	for (auto& object : objects) {
+		if (object->name == name) {
+			return object;
+		}
+	}
+
+	return nullptr;
 }
 
 void Scene::Start() {
