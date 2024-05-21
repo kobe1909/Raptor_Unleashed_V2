@@ -1,7 +1,8 @@
 #include "Scene.h"
 #include "App.h"
+#include <list>
 
-Scene::Scene(App* app, std::vector<BaseComponent*> objects, std::vector<Light*> lights, Camera& camera) {
+Scene::Scene(App* app, std::vector<BaseComponent*> objects, std::vector<Light*> lights, Camera* camera) {
 	this->app = app;
 	Register(objects);
 	AddLight(lights);
@@ -9,6 +10,7 @@ Scene::Scene(App* app, std::vector<BaseComponent*> objects, std::vector<Light*> 
 }
 
 void Scene::Register(BaseComponent* object) {
+	object->scene = this;
 	objects.push_back(object);
 	object->scene = this;
 	object->app = app;
@@ -28,7 +30,6 @@ void Scene::AddLight(std::vector<Light*> new_lights) {
 	}
 }
 
-
 void Scene::AddLightsToShader(Shader& shader) {
 	int nPointLights = 0;
 	for (Light*& light : lights) {
@@ -45,7 +46,14 @@ void Scene::AddLightsToShader(Shader& shader) {
 	}
 }
 void Scene::AddCameraToShader(Shader& shader) {
-	shader.SetUniformMat4f("view", camera.GetView());
+	shader.SetUniformMat4f("view", camera->GetView());
+}
+
+void Scene::AddSceneToShader(Shader& shader) {
+	shader.Bind();
+	AddLightsToShader(shader);
+	AddCameraToShader(shader);
+	shader.SetUniformMat4f("proj", app->proj);
 }
 
 void Scene::Start() {

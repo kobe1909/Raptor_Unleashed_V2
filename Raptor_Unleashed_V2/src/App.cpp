@@ -19,15 +19,17 @@ bool GLLogCall(const char* function, const char* file, int line) {
 bool App::GetKeyState(int key, int state) {
 	return glfwGetKey(window, key) == state;
 }
+bool App::GetKeyState(int key) {
+	return glfwGetKey(window, key) == GLFW_PRESS;
+}
 
-bool App::CreateWindow(glm::vec2 windowSize, const char* title) {
+bool App::CreateWindow(glm::vec2 windowSize, const char* title, bool maximize) {
 	this->windowSize = windowSize;
-	proj = glm::perspective(45.f, windowSize.x / windowSize.y, 0.01f, 50.f);
-
 	if (!glfwInit())
 		return false;
 
 	window = glfwCreateWindow(this->windowSize.x, this->windowSize.y, title, NULL, NULL);
+	buffer = new int[windowSize.x * windowSize.y * 3];
 	if (!window) {
 		glfwTerminate();
 		return false;
@@ -46,7 +48,15 @@ bool App::CreateWindow(glm::vec2 windowSize, const char* title) {
 	ImGui_ImplOpenGL3_Init("#version 330");
 
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	
+	if (maximize) {
+		glfwMaximizeWindow(window);
+		int width, height;
+		glfwGetWindowSize(window, &width, &height);
+		windowSize = glm::vec2(width, height);
+	}
 
+	proj = glm::perspective(45.f, windowSize.x / windowSize.y, 0.01f, 50.f);
 
 	return true;
 }
@@ -57,6 +67,8 @@ void App::Run(std::function<void(double)> fun) {
 		glfwGetWindowSize(window, &width, &height);
 		if (width != windowSize.x || height != windowSize.y) {
 			windowSize = glm::vec2(width, height);
+			delete buffer;
+			buffer = new int[width * height * 3];
 			GLCALL(glViewport(0, 0, width, height));
 			proj = glm::perspective(45.f, windowSize.x / windowSize.y, 0.01f, 50.f);
 		}
@@ -64,6 +76,14 @@ void App::Run(std::function<void(double)> fun) {
 		double xPos, yPos;
 		glfwGetCursorPos(window, &xPos, &yPos);
 		mousePos = glm::vec2((float)xPos, (float)yPos);
+
+		if (firstMouseMove) {
+			lastMousePos = mousePos;
+			firstMouseMove = false;
+		}
+
+		mouseOffset = mousePos - lastMousePos;
+		lastMousePos = mousePos;
 
 		if (GetKeyState(GLFW_KEY_LEFT_ALT, GLFW_PRESS)) {
 			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
@@ -90,6 +110,13 @@ void App::Run(std::function<void(double)> fun) {
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 		glfwSwapBuffers(window);
+
+		GLCALL(glReadPixels(0, 0, windowSize.x, windowSize.y, GL_RGB, GL_UNSIGNED_BYTE, buffer));
+		//std::cout << *buffer << std::endl;
+
+		// Save the window buffer to a file
+		//GLCALL(glReadPixels(0, 0, windowSize.x, windowSize.y, GL_BGR, GL_UNSIGNED_BYTE, buffer));
+
 		glfwPollEvents();
 	}
 }

@@ -62,6 +62,18 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene) {
 			vertex.Normal = vector;
 		}
 
+		// Tangents
+		vector.x = mesh->mTangents[i].x;
+		vector.y = mesh->mTangents[i].y;
+		vector.z = mesh->mTangents[i].z;
+		vertex.Tangents = vector;
+
+		// Bitangents
+		vector.x = mesh->mBitangents[i].x;
+		vector.y = mesh->mBitangents[i].y;
+		vector.z = mesh->mBitangents[i].z;
+		vertex.Bitangents = vector;
+
 		// Texture coordinates
 		if (mesh->mTextureCoords[0]) { // does the mesh have texture coords?
 			glm::vec2 vec;
@@ -94,6 +106,10 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene) {
 	// specular maps
 	std::vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
 	textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
+
+	// normal maps
+	std::vector<Texture> normalMaps = loadMaterialTextures(material, aiTextureType_HEIGHT, "texture_normal");
+	textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
 
 	return Mesh(vertices, indices, textures);
 }
@@ -134,7 +150,7 @@ unsigned int Model::textureFromFile(const char* path, const std::string& directo
 	GLCALL(glGenTextures(1, &textureID));
 
 	int width, height, nrComponents;
-	stbi_set_flip_vertically_on_load(true);
+	stbi_set_flip_vertically_on_load(false);
 	unsigned char* data = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
 	if (data) {
 		GLenum format;

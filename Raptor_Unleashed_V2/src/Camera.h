@@ -11,6 +11,11 @@ public:
 		this->scale = glm::vec3(1.f, 1.f, 1.f);
 	}
 
+	void SetTransform(Transform transform) {
+		this->position = transform.position;
+		this->rotation = transform.rotation;
+	}
+
 	glm::vec3 GetUpVector() {
 		return glm::vec3(0, 1, 0);
 	}
@@ -25,5 +30,9 @@ public:
 
 	glm::mat4 GetView() {
 		return glm::lookAt(position, position + GetFrontVector(), GetUpVector());
+	}
+
+	operator Camera* () {
+		return this;
 	}
 };

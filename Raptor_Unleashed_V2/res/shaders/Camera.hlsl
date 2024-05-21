@@ -7,6 +7,10 @@ layout(location = 1) in
 vec3 inNormal;
 layout(location = 2) in
 vec2 inTexCoords;
+layout(location = 3) in
+vec3 inTangents;
+layout(location = 4) in
+vec3 inBitangents;
 
 uniform mat4 model;
 uniform mat4 view;
@@ -18,6 +22,8 @@ out
 vec3 FragPos;
 out 
 vec2 TexCoords;
+out
+mat3 TBN;
 
 void main()
 {
@@ -25,6 +31,12 @@ void main()
     normal = mat3(transpose(inverse(model))) * inNormal;
     TexCoords = inTexCoords;
     gl_Position = proj * view * vec4(FragPos, 1.0);
+    
+    vec3 T = normalize(vec3(model * vec4(inTangents,   0.0) ) );
+    vec3 B = normalize(vec3(model * vec4(inBitangents, 0.0) ) );
+    vec3 N = normalize(vec3(model * vec4(inNormal,     0.0) ) );
+    
+    TBN = mat3(T, B, N);
 };
 
 
@@ -35,6 +47,7 @@ struct Material
 {
     sampler2D texture_diffuse1;
     sampler2D texture_specular1;
+    sampler2D texture_normal1;
     float shininess;
 };
 
@@ -84,6 +97,7 @@ in
 vec3 FragPos;
 in
 vec2 TexCoords;
+in mat3 TBN;
 
 vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir);
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
@@ -92,7 +106,7 @@ vec3 CalcSpotLight(SpotLight spotLight, vec3 normal, vec3 fragPos, vec3 viewDir)
 void main()
 {
 	// Properties
-    vec3 norm = normalize(normal);
+    vec3 norm = normalize(TBN * (texture(material.texture_normal1, TexCoords).rgb * 2.0 - 1.0));
     vec3 viewDir = normalize(cameraPos - FragPos);
     
     // Directional lighting
