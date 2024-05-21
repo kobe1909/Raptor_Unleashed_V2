@@ -7,7 +7,7 @@
 
 class Cube : public BaseComponent {
 public:
-    Model model = Model("res/backpack/backpack.obj");
+    Model model = Model("res/raptor_delta/scene.gltf");
     double x = 0;
     double speed = 10;
     bool rotate = false;
@@ -50,8 +50,8 @@ public:
         glm::vec2 mouseOffset = app->mouseOffset;
         mouseOffset *= sensitivity;
 
-        transform.rotation.y += mouseOffset.x;
-        transform.rotation.x -= mouseOffset.y;
+        //transform.rotation.y += mouseOffset.x;
+        //transform.rotation.x -= mouseOffset.y;
         //std::cout << scene.camera->rotation.x << '\t' << scene.camera->rotation.y << std::endl;
 
         if (transform.rotation.x > 89.f) {
@@ -88,16 +88,16 @@ int main(void) {
         return -1;
     }
     Cube cube("Backpack");
-    Cube cube2("Backpack2");
-    cube2.transform.position.x += 5;
+    //Cube cube2("Backpack2");
+    //cube2.transform.position.x += 5;
 
-    DirectionalLight dirLight(glm::vec3(0.f, -1.f, 0.f), glm::vec3(1.f, 1.f, 1.f), glm::vec3(1.f, 1.f, 1.f), glm::vec3(1.f, 1.f, 1.f));
-    PointLight pointLight(glm::vec3(0.f, 0.f, 2.f), glm::vec3(1.f, 1.f, 1.f), glm::vec3(1.f, 1.f, 1.f), glm::vec3(1.f, 1.f, 1.f), 1, 0.35f, 0.44f);
+    DirectionalLight dirLight(glm::normalize(glm::vec3(1.f, -2.f, 1.f)), glm::vec3(.7f, .7f, .7f), glm::vec3(1.f, 1.f, 1.f), glm::vec3(1.f, 0.f, 0.f));
+    PointLight pointLight(glm::vec3(0.f, 0.f, 4.f), glm::vec3(1.f, 1.f, 1.f), glm::vec3(1.f, 1.f, 1.f), glm::vec3(1.f, 0.f, 0.f), 1, 0.35f, 0.44f);
 
-    Camera camera(glm::vec3(0, 4, 10), glm::vec3(0, -90.f, 0));
+    Camera camera(glm::vec3(-2, 0.5f, 2), glm::vec3(0, -45.f, 0));
     Player player(&camera);
 
-    Scene scene(&app, { cube, cube2, player }, { dirLight, pointLight }, camera);
+    Scene scene(&app, { cube, player }, { dirLight, pointLight }, camera);
 
     scene.Start();
 
@@ -107,7 +107,8 @@ int main(void) {
     float position = 0;
 
     app.Run([&](double deltaTime) {
-        glClearColor(1 - x, 0, x, 1);
+        //glClearColor(1 - x, 0, x, 1);
+        glClearColor(1, 1, 1, 1);
         x += speed * deltaTime;
         if (x > 1) {
             x = 1;
@@ -125,7 +126,7 @@ int main(void) {
         ImGui::Begin("Debug window");
         ImGui::Text("text");
         ImGui::Checkbox("Rotate Backpack 1", &cube.rotate);
-        ImGui::Checkbox("Rotate Backpack 2", &cube2.rotate);
+        //ImGui::Checkbox("Rotate Backpack 2", &cube2.rotate);
         ImGui::End();
     });
 

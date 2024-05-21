@@ -29,6 +29,7 @@ bool App::CreateWindow(glm::vec2 windowSize, const char* title, bool maximize) {
 		return false;
 
 	window = glfwCreateWindow(this->windowSize.x, this->windowSize.y, title, NULL, NULL);
+	buffer = new int[windowSize.x * windowSize.y * 3];
 	if (!window) {
 		glfwTerminate();
 		return false;
@@ -66,10 +67,10 @@ void App::Run(std::function<void(double)> fun) {
 		glfwGetWindowSize(window, &width, &height);
 		if (width != windowSize.x || height != windowSize.y) {
 			windowSize = glm::vec2(width, height);
+			delete buffer;
+			buffer = new int[width * height * 3];
 			GLCALL(glViewport(0, 0, width, height));
 			proj = glm::perspective(45.f, windowSize.x / windowSize.y, 0.01f, 50.f);
-			delete[] buffer;
-			buffer = new int[width, height];
 		}
 
 		double xPos, yPos;
@@ -109,6 +110,9 @@ void App::Run(std::function<void(double)> fun) {
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 		glfwSwapBuffers(window);
+
+		GLCALL(glReadPixels(0, 0, windowSize.x, windowSize.y, GL_RGB, GL_UNSIGNED_BYTE, buffer));
+		//std::cout << *buffer << std::endl;
 
 		// Save the window buffer to a file
 		//GLCALL(glReadPixels(0, 0, windowSize.x, windowSize.y, GL_BGR, GL_UNSIGNED_BYTE, buffer));

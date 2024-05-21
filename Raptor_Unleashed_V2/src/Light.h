@@ -19,6 +19,10 @@ public:
 	operator Light* () { return this; }
 };
 
+class RoomLight : public Light {
+
+};
+
 class DirectionalLight : public Light {
 public:
 	glm::vec3 direction;

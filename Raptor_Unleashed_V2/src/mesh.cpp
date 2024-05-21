@@ -34,6 +34,14 @@ void Mesh::setupMesh() {
 	GLCALL(glEnableVertexAttribArray(2));
 	GLCALL(glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords)));
 
+	// Vertex tangents
+	GLCALL(glEnableVertexAttribArray(3));
+	GLCALL(glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Tangents)));
+
+	// Vertex tangents
+	GLCALL(glEnableVertexAttribArray(4));
+	GLCALL(glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Bitangents)));
+
 	GLCALL(glBindVertexArray(0));
 }
 
