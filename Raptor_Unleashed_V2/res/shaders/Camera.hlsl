@@ -16,27 +16,25 @@ uniform mat4 model;
 uniform mat4 view;
 uniform mat4 proj;
 
-out
-vec3 normal;
-out
-vec3 FragPos;
-out 
-vec2 TexCoords;
-out
-mat3 TBN;
+out VS_OUT {
+    vec3 normal;
+    vec3 fragPos;
+    vec2 texCoords;
+    mat3 TBN;
+} vs_out;
 
 void main()
 {
-    FragPos = vec3(model * vec4(position, 1.0));
-    normal = mat3(transpose(inverse(model))) * inNormal;
-    TexCoords = inTexCoords;
-    gl_Position = proj * view * vec4(FragPos, 1.0);
+    vs_out.fragPos = vec3(model * vec4(position, 1.0));
+    vs_out.normal = mat3(transpose(inverse(model))) * inNormal;
+    vs_out.texCoords = inTexCoords;
+    gl_Position = proj * view * vec4(vs_out.fragPos, 1.0);
     
     vec3 T = normalize(vec3(model * vec4(inTangents,   0.0) ) );
     vec3 B = normalize(vec3(model * vec4(inBitangents, 0.0) ) );
     vec3 N = normalize(vec3(model * vec4(inNormal,     0.0) ) );
     
-    TBN = mat3(T, B, N);
+    vs_out.TBN = mat3(T, B, N);
 };
 
 
@@ -79,8 +77,7 @@ struct SpotLight
     vec3 specular;
 };
 
-layout(location = 0) out
-vec4 color;
+layout(location = 0) out vec4 color;
 
 uniform vec3 cameraPos;
 
@@ -91,13 +88,12 @@ uniform DirLight dirLight;
 uniform PointLight pointLights[NR_POINTS_LIGHTS];
 uniform SpotLight spotLight;
 
-in
-vec3 normal;
-in
-vec3 FragPos;
-in
-vec2 TexCoords;
-in mat3 TBN;
+in VS_OUT {
+    vec3 normal;
+    vec3 fragPos;
+    vec2 texCoords;
+    mat3 TBN;
+} fs_in;
 
 vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir);
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
@@ -106,18 +102,18 @@ vec3 CalcSpotLight(SpotLight spotLight, vec3 normal, vec3 fragPos, vec3 viewDir)
 void main()
 {
 	// Properties
-    vec3 norm = normalize(TBN * (texture(material.texture_normal1, TexCoords).rgb * 2.0 - 1.0));
-    vec3 viewDir = normalize(cameraPos - FragPos);
+    vec3 norm = normalize(fs_in.TBN * (texture(material.texture_normal1, fs_in.texCoords).rgb * 2.0 - 1.0));
+    vec3 viewDir = normalize(cameraPos - fs_in.fragPos);
     
     // Directional lighting
     vec3 result = CalcDirLight(dirLight, norm, viewDir);
     
     // Point lights
     for (int i = 0; i < NR_POINTS_LIGHTS; i++) 
-        result += CalcPointLight(pointLights[i], norm, FragPos, viewDir);
+        result += CalcPointLight(pointLights[i], norm, fs_in.fragPos, viewDir);
     
     // Spot lights
-    result += CalcSpotLight(spotLight, norm, FragPos, viewDir);
+    result += CalcSpotLight(spotLight, norm, fs_in.fragPos, viewDir);
     
     color = vec4(result, 1.0);
 };

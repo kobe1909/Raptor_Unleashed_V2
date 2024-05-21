@@ -1,5 +1,6 @@
 #include "App.h"
 #include "glm/gtc/matrix_transform.hpp"
+#include "lodepng/lodepng.h"
 
 void GLClearError() {
 	while (glGetError() != GL_NO_ERROR);
@@ -28,13 +29,18 @@ bool App::CreateWindow(glm::vec2 windowSize, const char* title, bool maximize) {
 	if (!glfwInit())
 		return false;
 
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	//glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+
 	window = glfwCreateWindow(this->windowSize.x, this->windowSize.y, title, NULL, NULL);
-	buffer = new int[windowSize.x * windowSize.y * 3];
+	buffer = new unsigned char[windowSize.x * windowSize.y * 4];
 	if (!window) {
 		glfwTerminate();
 		return false;
 	}
-
+	
 	glfwMakeContextCurrent(window);
 	glewInit();
 	//GLCALL(glClearColor(1, 0, 0, 1));
@@ -68,7 +74,7 @@ void App::Run(std::function<void(double)> fun) {
 		if (width != windowSize.x || height != windowSize.y) {
 			windowSize = glm::vec2(width, height);
 			delete buffer;
-			buffer = new int[width * height * 3];
+			buffer = new unsigned char[width * height * 4];
 			GLCALL(glViewport(0, 0, width, height));
 			proj = glm::perspective(45.f, windowSize.x / windowSize.y, 0.01f, 50.f);
 		}
@@ -93,7 +99,7 @@ void App::Run(std::function<void(double)> fun) {
 		else {
 			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		}
-
+		std::cout << "Clear" << std::endl;
 		GLCALL(glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT));
 
 		ImGui_ImplOpenGL3_NewFrame();
@@ -104,18 +110,38 @@ void App::Run(std::function<void(double)> fun) {
 		double deltaTime = current_time - lastTime;
 		lastTime = current_time;
 
+		glfwSetWindowTitle(window, ("Raptor Unleashed " + std::to_string(1 / deltaTime)).c_str());
+		std::cout << "Main loop begon" << std::endl;
 		fun(deltaTime);
+		std::cout << "Main loop ended" << std::endl;
 
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 		glfwSwapBuffers(window);
 
-		GLCALL(glReadPixels(0, 0, windowSize.x, windowSize.y, GL_RGB, GL_UNSIGNED_BYTE, buffer));
-		//std::cout << *buffer << std::endl;
+		bool safeToImage = false;
+		if (safeToImage) {
+			GLCALL(glReadPixels(0, 0, windowSize.x, windowSize.y, GL_RGBA, GL_UNSIGNED_BYTE, buffer));
+			std::cout << "Got pixel buffer" << std::endl;
 
-		// Save the window buffer to a file
-		//GLCALL(glReadPixels(0, 0, windowSize.x, windowSize.y, GL_BGR, GL_UNSIGNED_BYTE, buffer));
+			// put the pixels into a vector 
+			std::vector<unsigned char> image;
+			for (int i = 0; i < windowSize.x * windowSize.y * 4; i++) {
+				unsigned char data = *(buffer + i);
+
+				image.push_back(data);
+			}
+			std::cout << "Created image vector" << std::endl;
+
+
+			//Encode the image
+			unsigned error = lodepng::encode("testframe.png", image, windowSize.x, windowSize.y);
+			std::cout << "Saved into image" << std::endl;
+
+			//if there's an error, display it
+			if (error) std::cout << "encoder error " << error << ": " << lodepng_error_text(error) << std::endl;
+		}
 
 		glfwPollEvents();
 	}

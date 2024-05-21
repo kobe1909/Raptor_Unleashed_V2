@@ -150,7 +150,7 @@ unsigned int Model::textureFromFile(const char* path, const std::string& directo
 	GLCALL(glGenTextures(1, &textureID));
 
 	int width, height, nrComponents;
-	stbi_set_flip_vertically_on_load(false);
+	stbi_set_flip_vertically_on_load(flipTexture);
 	unsigned char* data = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
 	if (data) {
 		GLenum format;

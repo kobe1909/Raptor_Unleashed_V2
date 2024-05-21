@@ -7,7 +7,7 @@
 
 class Cube : public BaseComponent {
 public:
-    Model model = Model("res/raptor_delta/scene.gltf");
+    Model model = Model("res/raptor_delta/scene.gltf", false);
     double x = 0;
     double speed = 10;
     bool rotate = false;
@@ -50,9 +50,9 @@ public:
         glm::vec2 mouseOffset = app->mouseOffset;
         mouseOffset *= sensitivity;
 
-        //transform.rotation.y += mouseOffset.x;
-        //transform.rotation.x -= mouseOffset.y;
-        //std::cout << scene.camera->rotation.x << '\t' << scene.camera->rotation.y << std::endl;
+        transform.rotation.y += mouseOffset.x;
+        transform.rotation.x -= mouseOffset.y;
+        std::cout << scene->camera->rotation.x << '\t' << scene->camera->rotation.y << std::endl;
 
         if (transform.rotation.x > 89.f) {
             transform.rotation.x = 89.f;
@@ -62,7 +62,7 @@ public:
         }
         camera->SetTransform(transform);
 
-        const float cameraSpeed = 10;
+        const float cameraSpeed = 5;
         if (app->GetKeyState(GLFW_KEY_UP))
             transform.position += cameraSpeed * (float)deltaTime * camera->GetFrontVector();
         if (app->GetKeyState(GLFW_KEY_DOWN))
@@ -92,7 +92,7 @@ int main(void) {
     //cube2.transform.position.x += 5;
 
     DirectionalLight dirLight(glm::normalize(glm::vec3(1.f, -2.f, 1.f)), glm::vec3(.7f, .7f, .7f), glm::vec3(1.f, 1.f, 1.f), glm::vec3(1.f, 0.f, 0.f));
-    PointLight pointLight(glm::vec3(0.f, 0.f, 4.f), glm::vec3(1.f, 1.f, 1.f), glm::vec3(1.f, 1.f, 1.f), glm::vec3(1.f, 0.f, 0.f), 1, 0.35f, 0.44f);
+    PointLight pointLight(glm::vec3(0.f, 0.f, 2.f), glm::vec3(1.f, 1.f, 1.f), glm::vec3(1.f, 1.f, 1.f), glm::vec3(1.f, 0.f, 0.f), 1, 0.35f, 0.44f);
 
     Camera camera(glm::vec3(-2, 0.5f, 2), glm::vec3(0, -45.f, 0));
     Player player(&camera);
