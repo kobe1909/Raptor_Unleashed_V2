@@ -15,8 +15,9 @@ public:
 	std::vector<Mesh> meshes;
 	std::string directory;
 	bool gammaCorrection;
+	bool flipTexture;
 
-	Model(std::string const &path, bool gamma = false) : gammaCorrection(gamma) {
+	Model(std::string const &path, bool flipTextures = true, bool gamma = false) : gammaCorrection(gamma), flipTexture(flipTextures) {
 		loadModel(path);
 	}
 

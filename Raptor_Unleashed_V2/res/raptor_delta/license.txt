@@ -1,0 +1,11 @@
+Model Information:
+* title:	Raptor Delta
+* source:	https://sketchfab.com/3d-models/raptor-delta-f515085f4b7d491b915a2000b9ffe0ed
+* author:	kenchoo (https://sketchfab.com/kenchoo)
+
+Model License:
+* license type:	CC-BY-NC-ND-4.0 (http://creativecommons.org/licenses/by-nc-nd/4.0/)
+* requirements:	Author must be credited. No commercial use. Modified versions can not be distributed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Raptor Delta" (https://sketchfab.com/3d-models/raptor-delta-f515085f4b7d491b915a2000b9ffe0ed) by kenchoo (https://sketchfab.com/kenchoo) licensed under CC-BY-NC-ND-4.0 (http://creativecommons.org/licenses/by-nc-nd/4.0/)
