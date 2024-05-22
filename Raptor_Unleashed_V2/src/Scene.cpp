@@ -1,6 +1,7 @@
 #include "Scene.h"
 #include "App.h"
 #include <list>
+#include <stdexcept>
 
 Scene::Scene(App* app, std::vector<BaseComponent*> objects, std::vector<Light*> lights, Camera* camera) {
 	this->app = app;
@@ -10,6 +11,11 @@ Scene::Scene(App* app, std::vector<BaseComponent*> objects, std::vector<Light*> 
 }
 
 void Scene::Register(BaseComponent* object) {
+	for (auto& element : objects) {
+		if (element->name == object->name) {
+			throw std::invalid_argument("An object with this name already exists in this scene.");
+		}
+	}
 	object->scene = this;
 	objects.push_back(object);
 	object->scene = this;

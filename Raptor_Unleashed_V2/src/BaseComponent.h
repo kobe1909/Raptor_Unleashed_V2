@@ -28,19 +28,3 @@ public:
 
 	operator BaseComponent* () { return this; }
 };
-
-/*
-* class Entity : public BaseComponent {
-*	additional variables
-*	
-*	void OnStart() {
-*		this code will be run at the start of the game
-*	}
-*	void OnUpdate() {
-*		this code will run every frame
-*	}
-*	void OnDestroy() {
-*		this code will run at the end of the game
-*	}
-* }
-*/

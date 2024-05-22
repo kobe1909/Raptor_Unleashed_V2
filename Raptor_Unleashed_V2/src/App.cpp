@@ -36,7 +36,8 @@ bool App::CreateWindow(glm::vec2 windowSize, const char* title, bool maximize) {
 
 	glfwMakeContextCurrent(window);
 	glewInit();
-	//GLCALL(glClearColor(1, 0, 0, 1));
+	GLCALL(glClearColor(1, 0, 0, 1));
+	GLCALL(glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT));
 	GLCALL(glEnable(GL_DEPTH_TEST));
 
 	IMGUI_CHECKVERSION();
